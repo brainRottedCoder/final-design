@@ -1,0 +1,77 @@
+{
+    "sectionTitle": "Discharge Stations",
+    "stations": [
+        {
+            "id": "ds-001",
+            "title": "Syana Chatti Yamuna River",
+            "chartKey": "SCYR",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "blue"
+        },
+        {
+            "id": "ds-002",
+            "title": "Ganga River",
+            "chartKey": "GR",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "orange"
+        },
+        {
+            "id": "ds-003",
+            "title": "Satluj River",
+            "chartKey": "Sr",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "green"
+        },
+        {
+            "id": "ds-004",
+            "title": "Brahmaputra River",
+            "chartKey": "Br",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "yellow"
+        },
+        {
+            "id": "ds-005",
+            "title": "Indus River",
+            "chartKey": "InR",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "blue"
+        },
+        {
+            "id": "ds-006",
+            "title": "Jamuna River",
+            "chartKey": "JR",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "orange"
+        },
+        {
+            "id": "ds-007",
+            "title": "Kosi River",
+            "chartKey": "Ko",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "green"
+        },
+        {
+            "id": "ds-008",
+            "title": "Kaveri River",
+            "chartKey": "Kv",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "yellow"
+        }
+    ]
+}

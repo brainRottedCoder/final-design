@@ -1,0 +1,38 @@
+{
+    "metrics": [
+        {
+            "id": "discharge",
+            "title": "Discharge Stations",
+            "value": "00",
+            "clickable": true
+        },
+        {
+            "id": "weather",
+            "title": "Automatic Weather Stations",
+            "value": "00",
+            "clickable": true
+        },
+        {
+            "id": "rain-gauge",
+            "title": "Rain Gauge Stations",
+            "value": "09",
+            "clickable": true
+        },
+        {
+            "id": "juddo-pond",
+            "title": "Juddo Pond Level",
+            "value": "02",
+            "clickable": false
+        },
+        {
+            "id": "juddo-forebay",
+            "title": "Juddo Forebay Level",
+            "value": "02",
+            "clickable": false
+        }
+    ],
+    "lastUpdated": {
+        "date": "10 January 2026",
+        "time": "10:12:25 AM"
+    }
+}

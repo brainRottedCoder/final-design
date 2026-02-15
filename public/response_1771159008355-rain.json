@@ -1,0 +1,610 @@
+{
+  "status": 200,
+  "message": "Success",
+  "tab": "rain-gauge-stations",
+  "total": 1296,
+  "page": 1,
+  "page_size": 100,
+  "entity": [
+    {
+      "timestamp": "2026-02-07T00:00:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-07T00:00:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-07T00:00:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-07T00:00:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-07T00:00:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-07T00:00:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-07T00:00:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-07T00:00:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-07T00:00:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:50:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:50:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:50:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-06T23:50:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:50:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:50:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:50:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:50:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:50:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:40:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:40:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:40:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-06T23:40:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:40:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:40:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:40:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:40:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:40:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:30:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:30:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:30:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-06T23:30:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:30:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:30:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:30:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:30:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:30:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:20:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:20:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:20:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-06T23:20:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:20:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:20:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:20:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:20:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:20:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:10:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:10:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:10:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-06T23:10:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:10:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:10:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:10:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:10:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:10:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:00:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:00:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:00:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-06T23:00:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:00:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:00:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:00:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:00:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T23:00:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:50:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:50:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:50:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-06T22:50:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:50:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:50:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:50:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:50:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:50:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:40:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:40:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:40:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-06T22:40:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:40:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:40:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:40:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:40:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:40:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:30:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:30:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:30:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-06T22:30:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:30:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:30:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:30:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:30:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:30:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:20:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:20:00",
+      "station": "Surakhet",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:20:00",
+      "station": "Purola",
+      "hour": 0.20000000298023224,
+      "total": 0.20000000298023224
+    },
+    {
+      "timestamp": "2026-02-06T22:20:00",
+      "station": "Nagtiba",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:20:00",
+      "station": "KandiMalli",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:20:00",
+      "station": "Juddo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:20:00",
+      "station": "Jaindeo",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:20:00",
+      "station": "GauraGhati",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:20:00",
+      "station": "Dhanaulti",
+      "hour": 0,
+      "total": 0
+    },
+    {
+      "timestamp": "2026-02-06T22:10:00",
+      "station": "Surnol",
+      "hour": 0,
+      "total": 0
+    }
+  ]
+}

@@ -1,0 +1,379 @@
+{
+    "discharge": {
+        "sectionTitle": "Statistics",
+        "charts": {
+            "discharge": {
+                "title": "Discharge",
+                "data": [
+                    {
+                        "name": "SCYR",
+                        "value": 290
+                    },
+                    {
+                        "name": "GR",
+                        "value": 480
+                    },
+                    {
+                        "name": "Sr",
+                        "value": 420
+                    },
+                    {
+                        "name": "Br",
+                        "value": 490
+                    },
+                    {
+                        "name": "InR",
+                        "value": 520
+                    },
+                    {
+                        "name": "JR",
+                        "value": 480
+                    },
+                    {
+                        "name": "Ko",
+                        "value": 500
+                    },
+                    {
+                        "name": "Kv",
+                        "value": 500
+                    }
+                ],
+                "maxValue": 600
+            },
+            "velocity": {
+                "title": "Velocity",
+                "data": [
+                    {
+                        "name": "SCYR",
+                        "value": 420
+                    },
+                    {
+                        "name": "GR",
+                        "value": 480
+                    },
+                    {
+                        "name": "Sr",
+                        "value": 460
+                    },
+                    {
+                        "name": "Br",
+                        "value": 480
+                    },
+                    {
+                        "name": "InR",
+                        "value": 440
+                    },
+                    {
+                        "name": "JR",
+                        "value": 420
+                    },
+                    {
+                        "name": "Ko",
+                        "value": 400
+                    },
+                    {
+                        "name": "Kv",
+                        "value": 400
+                    }
+                ],
+                "maxValue": 600
+            },
+            "waterLevel": {
+                "title": "Water Level",
+                "data": [
+                    {
+                        "name": "SCYR",
+                        "value": 450
+                    },
+                    {
+                        "name": "GR",
+                        "value": 480
+                    },
+                    {
+                        "name": "Sr",
+                        "value": 420
+                    },
+                    {
+                        "name": "Br",
+                        "value": 480
+                    },
+                    {
+                        "name": "InR",
+                        "value": 350
+                    },
+                    {
+                        "name": "JR",
+                        "value": 420
+                    },
+                    {
+                        "name": "Ko",
+                        "value": 380
+                    },
+                    {
+                        "name": "Kv",
+                        "value": 380
+                    }
+                ],
+                "maxValue": 600
+            }
+        }
+    },
+    "weather": {
+        "sectionTitle": "Statistics",
+        "charts": {
+            "windSpeed": {
+                "title": "Wind Speed",
+                "data": [
+                    {
+                        "name": "Thatyur",
+                        "value": 1000
+                    },
+                    {
+                        "name": "Kisala",
+                        "value": 380
+                    },
+                    {
+                        "name": "Lakhwar",
+                        "value": 350
+                    }
+                ],
+                "maxValue": 500
+            },
+            "windDirection": {
+                "title": "Wind Direction",
+                "data": [
+                    {
+                        "name": "Thatyur",
+                        "value": 280
+                    },
+                    {
+                        "name": "Kisala",
+                        "value": 310
+                    },
+                    {
+                        "name": "Lakhwar",
+                        "value": 290
+                    }
+                ],
+                "maxValue": 500
+            },
+            "temperature": {
+                "title": "Temperature",
+                "data": [
+                    {
+                        "name": "Thatyur",
+                        "value": 420
+                    },
+                    {
+                        "name": "Kisala",
+                        "value": 380
+                    },
+                    {
+                        "name": "Lakhwar",
+                        "value": 400
+                    }
+                ],
+                "maxValue": 500
+            },
+            "relativeHumidity": {
+                "title": "Humidity",
+                "data": [
+                    {
+                        "name": "Thatyur",
+                        "value": 450
+                    },
+                    {
+                        "name": "Kisala",
+                        "value": 420
+                    },
+                    {
+                        "name": "Lakhwar",
+                        "value": 400
+                    }
+                ],
+                "maxValue": 500
+            },
+            "airPressure": {
+                "title": "Air Pressure",
+                "data": [
+                    {
+                        "name": "Thatyur",
+                        "value": 380
+                    },
+                    {
+                        "name": "Kisala",
+                        "value": 400
+                    },
+                    {
+                        "name": "Lakhwar",
+                        "value": 360
+                    }
+                ],
+                "maxValue": 500
+            },
+            "solarRadiation": {
+                "title": "Solar Radiation",
+                "data": [
+                    {
+                        "name": "Thatyur",
+                        "value": 300
+                    },
+                    {
+                        "name": "Kisala",
+                        "value": 350
+                    },
+                    {
+                        "name": "Lakhwar",
+                        "value": 320
+                    }
+                ],
+                "maxValue": 500
+            },
+            "rainfallHR": {
+                "title": "Rainfall HR",
+                "data": [
+                    {
+                        "name": "Thatyur",
+                        "value": 250
+                    },
+                    {
+                        "name": "Kisala",
+                        "value": 280
+                    },
+                    {
+                        "name": "Lakhwar",
+                        "value": 260
+                    }
+                ],
+                "maxValue": 500
+            },
+            "rainfallDay": {
+                "title": "Rainfall Day",
+                "data": [
+                    {
+                        "name": "Thatyur",
+                        "value": 340
+                    },
+                    {
+                        "name": "Kisala",
+                        "value": 380
+                    },
+                    {
+                        "name": "Lakhwar",
+                        "value": 350
+                    }
+                ],
+                "maxValue": 500
+            },
+            "rainfallTotal": {
+                "title": "Rainfall Total",
+                "data": [
+                    {
+                        "name": "Thatyur",
+                        "value": 420
+                    },
+                    {
+                        "name": "Kisala",
+                        "value": 450
+                    },
+                    {
+                        "name": "Lakhwar",
+                        "value": 400
+                    }
+                ],
+                "maxValue": 500
+            }
+        },
+        "maxValue": 500
+    },
+    "rainGauge": {
+        "sectionTitle": "Statistics",
+        "charts": {
+            "rainfallHR": {
+                "title": "Rainfall - HR (mm)",
+                "data": [
+                    {
+                        "name": "JD",
+                        "value": 120
+                    },
+                    {
+                        "name": "Su",
+                        "value": 80
+                    },
+                    {
+                        "name": "Sk",
+                        "value": 150
+                    },
+                    {
+                        "name": "Pu",
+                        "value": 60
+                    },
+                    {
+                        "name": "Dh",
+                        "value": 180
+                    },
+                    {
+                        "name": "Ja",
+                        "value": 100
+                    },
+                    {
+                        "name": "Na",
+                        "value": 140
+                    },
+                    {
+                        "name": "GG",
+                        "value": 90
+                    },
+                    {
+                        "name": "KM",
+                        "value": 110
+                    }
+                ],
+                "maxValue": 250
+            },
+            "rainfallTotal": {
+                "title": "Rainfall - Total (mm)",
+                "data": [
+                    {
+                        "name": "JD",
+                        "value": 156
+                    },
+                    {
+                        "name": "Su",
+                        "value": 142
+                    },
+                    {
+                        "name": "Sk",
+                        "value": 189
+                    },
+                    {
+                        "name": "Pu",
+                        "value": 122
+                    },
+                    {
+                        "name": "Dh",
+                        "value": 210
+                    },
+                    {
+                        "name": "Ja",
+                        "value": 165
+                    },
+                    {
+                        "name": "Na",
+                        "value": 178
+                    },
+                    {
+                        "name": "GG",
+                        "value": 134
+                    },
+                    {
+                        "name": "KM",
+                        "value": 148
+                    }
+                ],
+                "maxValue": 250
+            }
+        },
+        "maxValue": 250
+    }
+}

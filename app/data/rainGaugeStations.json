@@ -1,0 +1,77 @@
+{
+    "sectionTitle": "Rain Gauge Stations",
+    "stations": [
+        {
+            "id": "rg-001",
+            "title": "Juddo Dam",
+            "chartKey": "JD",
+            "color": "blue",
+            "rainfallHR": "12",
+            "rainfallTotal": "156"
+        },
+        {
+            "id": "rg-002",
+            "title": "Surnol",
+            "chartKey": "Su",
+            "color": "green",
+            "rainfallHR": "08",
+            "rainfallTotal": "142"
+        },
+        {
+            "id": "rg-003",
+            "title": "Surakhet",
+            "chartKey": "Sk",
+            "color": "orange",
+            "rainfallHR": "15",
+            "rainfallTotal": "189"
+        },
+        {
+            "id": "rg-004",
+            "title": "Purola",
+            "chartKey": "Pu",
+            "color": "yellow",
+            "rainfallHR": "06",
+            "rainfallTotal": "122"
+        },
+        {
+            "id": "rg-005",
+            "title": "Dhanvalti",
+            "chartKey": "Dh",
+            "color": "blue",
+            "rainfallHR": "18",
+            "rainfallTotal": "210"
+        },
+        {
+            "id": "rg-006",
+            "title": "Jaindeo",
+            "chartKey": "Ja",
+            "color": "green",
+            "rainfallHR": "10",
+            "rainfallTotal": "165"
+        },
+        {
+            "id": "rg-007",
+            "title": "Nagatiba",
+            "chartKey": "Na",
+            "color": "orange",
+            "rainfallHR": "14",
+            "rainfallTotal": "178"
+        },
+        {
+            "id": "rg-008",
+            "title": "GauraGhati",
+            "chartKey": "GG",
+            "color": "yellow",
+            "rainfallHR": "09",
+            "rainfallTotal": "134"
+        },
+        {
+            "id": "rg-009",
+            "title": "Kandi Malli",
+            "chartKey": "KM",
+            "color": "blue",
+            "rainfallHR": "11",
+            "rainfallTotal": "148"
+        }
+    ]
+}

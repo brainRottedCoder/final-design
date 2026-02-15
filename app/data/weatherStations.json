@@ -1,0 +1,50 @@
+{
+    "sectionTitle": "Automatic Weather Stations",
+    "stations": [
+        {
+            "id": "ws-001",
+            "title": "Thatyur",
+            "chartKey": "Thatyur",
+            "color": "blue",
+            "windSpeed": "03",
+            "windDirection": "03",
+            "temperature": "03",
+            "relativeHumidity": "03",
+            "airPressure": "03",
+            "solarRadiation": "03",
+            "rainfallHR": "03",
+            "rainfallDay": "03",
+            "rainfallTotal": "03"
+        },
+        {
+            "id": "ws-002",
+            "title": "Kisala",
+            "chartKey": "Kisala",
+            "color": "green",
+            "windSpeed": "03",
+            "windDirection": "03",
+            "temperature": "03",
+            "relativeHumidity": "03",
+            "airPressure": "03",
+            "solarRadiation": "03",
+            "rainfallHR": "03",
+            "rainfallDay": "03",
+            "rainfallTotal": "03"
+        },
+        {
+            "id": "ws-003",
+            "title": "Lakhwar",
+            "chartKey": "Lakhwar",
+            "color": "orange",
+            "windSpeed": "03",
+            "windDirection": "03",
+            "temperature": "03",
+            "relativeHumidity": "03",
+            "airPressure": "03",
+            "solarRadiation": "03",
+            "rainfallHR": "03",
+            "rainfallDay": "03",
+            "rainfallTotal": "03"
+        }
+    ]
+}
