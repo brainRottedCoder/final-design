@@ -66,25 +66,20 @@ async function downloadExport(format: 'pdf' | 'excel', options: ExportOptions) {
 
   const url = `/api/external/aws-stations/export/${format}?${params.toString()}`;
 
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Export API returned ${res.status}`);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Export API returned ${res.status}`);
 
-    const blob = await res.blob();
-    const ext = format === 'pdf' ? 'pdf' : 'xlsx';
-    const filename = `aws-station-report.${ext}`;
+  const blob = await res.blob();
+  const ext = format === 'pdf' ? 'pdf' : 'xlsx';
+  const filename = `aws-station-report.${ext}`;
 
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
-  } catch (error) {
-    console.error(`Failed to export ${format}:`, error);
-    alert(`Failed to export ${format}. Please try again.`);
-  }
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
 }
 
 export default function AutomaticWeatherReportPage() {

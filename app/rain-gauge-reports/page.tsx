@@ -53,33 +53,26 @@ async function downloadExport(format: 'pdf' | 'excel', options: ExportOptions) {
     end_time: fmtDate(options.end),
   });
 
-  // Add each station as a separate query param
   for (const station of options.stationIds) {
     params.append('stations', station);
   }
 
   const url = `/api/external/rain-gauge-stations/export/${format}?${params.toString()}`;
 
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Export API returned ${res.status}`);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Export API returned ${res.status}`);
 
-    const blob = await res.blob();
-    const ext = format === 'pdf' ? 'pdf' : 'xlsx';
-    const filename = `rain-gauge-report.${ext}`;
+  const blob = await res.blob();
+  const ext = format === 'pdf' ? 'pdf' : 'xlsx';
+  const filename = `rain-gauge-report.${ext}`;
 
-    // Trigger browser download
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
-  } catch (error) {
-    console.error(`Failed to export ${format}:`, error);
-    alert(`Failed to export ${format}. Please try again.`);
-  }
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
 }
 
 export default function RainGaugeReportPage() {
