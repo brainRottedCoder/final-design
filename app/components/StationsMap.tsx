@@ -113,16 +113,18 @@ export default function StationsMap({ center, stations, selectedStationName }: S
 
   return (
     <MapContainer
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      center={centerPosition}
-      zoom={10}
-      scrollWheelZoom
-      className="w-full h-full"
+      {...{
+        center: centerPosition,
+        zoom: 10,
+        scrollWheelZoom: true,
+        className: "w-full h-full",
+      } as any}
     >
       <TileLayer
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        attribution={'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' as any}
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        {...{
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        } as any}
       />
       {stations.map((s) => {
         const position: [number, number] = [s.lat, s.lon];
@@ -131,8 +133,8 @@ export default function StationsMap({ center, stations, selectedStationName }: S
         const selectedIcon = TYPE_SELECTED_ICONS[s.type];
         const icon = isSelected ? selectedIcon : baseIcon;
         return (
-          <Marker key={s.name} position={position} icon={icon}>
-            <Tooltip direction="top" offset={[0, -20]} opacity={0.9} permanent>
+          <Marker key={s.name} {...{ position, icon } as any}>
+            <Tooltip {...{ direction: "top", offset: [0, -20], opacity: 0.9, permanent: true } as any}>
               <span className="text-[11px] font-semibold">{s.name}</span>
             </Tooltip>
             <Popup>

@@ -1,30 +1,33 @@
 'use client';
 
 import Header from '../components/Header';
-import StationsMap, { type Station, type StationType } from '../components/StationsMap';
+import dynamic from 'next/dynamic';
+import type { Station, StationType } from '../components/StationsMap';
 import { useMemo, useState } from 'react';
 
+const StationsMap = dynamic(() => import('../components/StationsMap'), { ssr: false });
+
 const STATIONS: Station[] = [
-	{ type: 'Discharge', name: 'SyanaChatti', lat: 30.905956, lon: 78.360214 },
-	{ type: 'Discharge', name: 'Kisala (Barkot)', lat: 30.855556, lon: 78.285578 },
-	{ type: 'Discharge', name: 'Kharadi', lat: 30.821142, lon: 78.235703 },
-	{ type: 'Discharge', name: 'Thadung Purola', lat: 30.832161, lon: 78.097931 },
-	{ type: 'Discharge', name: 'Aglad', lat: 30.514358, lon: 77.999603 },
-	{ type: 'Discharge', name: 'Bhediyana Disc', lat: 30.509967, lon: 77.983458 },
-	{ type: 'Discharge', name: 'Juddo D S', lat: 30.523556, lon: 77.914567 },
-	{ type: 'Discharge', name: 'Hathiyari Disc', lat: 30.524031, lon: 77.884856 },
-	{ type: 'AWS', name: 'Thatyur', lat: 30.506483, lon: 78.1652 },
-	{ type: 'AWS', name: 'Lakhwar AWS', lat: 30.510759, lon: 77.943011 },
-	{ type: 'AWS', name: 'Kisala (Barkot)', lat: 30.855556, lon: 78.285578 },
-	{ type: 'Rain Gauge', name: 'Pantwari, Nagtibba', lat: 30.586892, lon: 78.087914 },
-	{ type: 'Rain Gauge', name: 'Kandi Malli', lat: 30.531725, lon: 78.007053 },
-	{ type: 'Rain Gauge', name: 'Juddo dam TB', lat: 30.520414, lon: 77.914848 },
-	{ type: 'Rain Gauge', name: 'Purola TB', lat: 30.880086, lon: 78.073925 },
-	{ type: 'Rain Gauge', name: 'Surakhet', lat: 30.802972, lon: 78.187789 },
-	{ type: 'Rain Gauge', name: 'Dhanaulti', lat: 30.426903, lon: 78.243839 },
-	{ type: 'Rain Gauge', name: 'Sarnol', lat: 30.919892, lon: 78.224136 },
-	{ type: 'Rain Gauge', name: 'Jaindeo', lat: 30.608642, lon: 77.959983 },
-	{ type: 'Rain Gauge', name: 'GauraGhati', lat: 30.7257, lon: 78.007753 },
+  { type: 'Discharge', name: 'SyanaChatti', lat: 30.905956, lon: 78.360214 },
+  { type: 'Discharge', name: 'Kisala (Barkot)', lat: 30.855556, lon: 78.285578 },
+  { type: 'Discharge', name: 'Kharadi', lat: 30.821142, lon: 78.235703 },
+  { type: 'Discharge', name: 'Thadung Purola', lat: 30.832161, lon: 78.097931 },
+  { type: 'Discharge', name: 'Aglad', lat: 30.514358, lon: 77.999603 },
+  { type: 'Discharge', name: 'Bhediyana Disc', lat: 30.509967, lon: 77.983458 },
+  { type: 'Discharge', name: 'Juddo D S', lat: 30.523556, lon: 77.914567 },
+  { type: 'Discharge', name: 'Hathiyari Disc', lat: 30.524031, lon: 77.884856 },
+  { type: 'AWS', name: 'Thatyur', lat: 30.506483, lon: 78.1652 },
+  { type: 'AWS', name: 'Lakhwar AWS', lat: 30.510759, lon: 77.943011 },
+  { type: 'AWS', name: 'Kisala (Barkot)', lat: 30.855556, lon: 78.285578 },
+  { type: 'Rain Gauge', name: 'Pantwari, Nagtibba', lat: 30.586892, lon: 78.087914 },
+  { type: 'Rain Gauge', name: 'Kandi Malli', lat: 30.531725, lon: 78.007053 },
+  { type: 'Rain Gauge', name: 'Juddo dam TB', lat: 30.520414, lon: 77.914848 },
+  { type: 'Rain Gauge', name: 'Purola TB', lat: 30.880086, lon: 78.073925 },
+  { type: 'Rain Gauge', name: 'Surakhet', lat: 30.802972, lon: 78.187789 },
+  { type: 'Rain Gauge', name: 'Dhanaulti', lat: 30.426903, lon: 78.243839 },
+  { type: 'Rain Gauge', name: 'Sarnol', lat: 30.919892, lon: 78.224136 },
+  { type: 'Rain Gauge', name: 'Jaindeo', lat: 30.608642, lon: 77.959983 },
+  { type: 'Rain Gauge', name: 'GauraGhati', lat: 30.7257, lon: 78.007753 },
 ];
 
 // Precomputed center of the cluster

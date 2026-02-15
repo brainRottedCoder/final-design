@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import Header, { type TabType } from '../components/Header';
@@ -26,7 +26,7 @@ const TAB_LABELS: Record<TabType, string> = {
     'map': 'Map',
 };
 
-export default function Overview() {
+function OverviewContent() {
     const searchParams = useSearchParams();
     const [activeTab, setActiveTab] = useState<TabType>('overview');
     const [selectedStations, setSelectedStations] = useState<{ chartKeys: string[]; titles: string[] }>({
@@ -402,5 +402,20 @@ export default function Overview() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function Overview() {
+    return (
+        <Suspense fallback={
+            <div className="h-screen flex items-center justify-center" style={{ backgroundColor: '#eef2ff' }}>
+                <div className="flex flex-col items-center gap-3">
+                    <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+                    <span className="text-gray-800 text-sm font-semibold tracking-wide">Loading...</span>
+                </div>
+            </div>
+        }>
+            <OverviewContent />
+        </Suspense>
     );
 }
