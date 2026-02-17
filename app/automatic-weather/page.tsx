@@ -42,7 +42,6 @@ async function fetchAwsData({
   page,
   pageSize,
 }: {
-  _stationId: string;  // Required by ReportPage interface but not used for multi-station reports
   stationIds: string[];
   start: Date;
   end: Date;

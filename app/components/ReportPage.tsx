@@ -26,7 +26,6 @@ export type ReportPageConfig = {
 };
 
 export type FetchDataOptions = {
-  stationId: string;
   stationIds: string[];  // All selected station IDs
   start: Date;
   end: Date;
@@ -108,11 +107,9 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
     activeStationIdsRef.current = stationIds;
     setIsLoading(true);
     setError(null);
-    const stationId = stationIds[0] || '';
     try {
       const result = await Promise.resolve(
         fetchData({
-          stationId,
           stationIds,
           start: timeRange.start,
           end: timeRange.end,
