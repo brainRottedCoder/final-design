@@ -176,7 +176,7 @@ export default function ReportCard({
                     <button
                         onClick={handleGenerate}
                         disabled={!!error}
-                        className={`text-white font-bold py-2 px-6 rounded text-sm transition-colors ${error ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}`}
+                        className={`text-white font-bold py-2 px-6 rounded text-sm transition-colors ${error ? 'opacity-50 cursor-pointer' : 'hover:opacity-90'}`}
                         style={{ backgroundColor: '#2d7a2d' }}
                     >
                         Generate Report

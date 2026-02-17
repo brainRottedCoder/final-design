@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import ReportPage, { type ReportPageConfig, type ExportOptions } from '../components/ReportPage';
+import ReportPage, { type ReportPageConfig, type ExportOptions, type FetchDataResult } from '../components/ReportPage';
 import { fetchRainGaugeStationReport, fetchRainGaugeStationNames } from '../services/dataService';
 import type { TableRow } from '../services/stationDataGenerator';
 
@@ -33,17 +33,24 @@ async function fetchRainGaugeData({
   stationIds,
   start,
   end,
+  page,
+  pageSize,
 }: {
+  stationId: string;
   stationIds: string[];
   start: Date;
   end: Date;
-}): Promise<TableRow[]> {
-  const rows = await fetchRainGaugeStationReport(
+  page: number;
+  pageSize: number;
+}): Promise<FetchDataResult> {
+  const result = await fetchRainGaugeStationReport(
     stationIds,
     fmtDate(start),
     fmtDate(end),
+    page,
+    pageSize,
   );
-  return rows as TableRow[];
+  return { rows: result.rows as TableRow[], total: result.total };
 }
 
 /** Download a file from the export API */

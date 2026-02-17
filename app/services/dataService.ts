@@ -456,7 +456,9 @@ export async function fetchDischargeStationNames(): Promise<Array<{ id: string; 
 
 /**
  * Fetch discharge station time-series report data from the API.
- * Supports multiple stations — fetches each in parallel and merges results.
+ * Makes a single API call. Passes selected station names as query params;
+ * if no stations provided, returns data for all stations.
+ * Returns { rows, total } to support server-side pagination.
  */
 export async function fetchDischargeStationReport(
     stations: string[],
@@ -464,48 +466,40 @@ export async function fetchDischargeStationReport(
     endTime: string,
     page: number = 1,
     pageSize: number = 100,
-): Promise<Array<Record<string, string | number>>> {
-    const fetchForStation = async (station: string) => {
-        const params = new URLSearchParams({
-            start_time: startTime,
-            end_time: endTime,
-            station,
-            page: String(page),
-            page_size: String(pageSize),
-        });
+): Promise<{ rows: Array<Record<string, string | number>>; total: number }> {
+    const params = new URLSearchParams({
+        start_time: startTime,
+        end_time: endTime,
+        page: String(page),
+        page_size: String(pageSize),
+    });
 
-        const res = await fetch(`/api/external/discharge-stations?${params.toString()}`);
-        if (!res.ok) throw new Error(`API returned ${res.status} for station ${station}`);
-        const json = await res.json();
+    // Add each selected station as a separate query param
+    // If none selected, omit param to get all stations
+    for (const station of stations) {
+        params.append('stations', station);
+    }
 
-        return (json.entity as Array<{
-            timestamp: string;
-            station: string;
-            discharge: number;
-            velocity: number;
-            water_level: number;
-        }>).map((row, i) => ({
-            timestamp: row.timestamp,
-            river: row.station,
-            discharge: row.discharge.toFixed(2),
-            velocity: row.velocity.toFixed(2),
-            waterLevel: row.water_level.toFixed(2),
-        }));
-    };
+    const res = await fetch(`/api/external/discharge-stations?${params.toString()}`);
+    if (!res.ok) throw new Error(`API returned ${res.status}`);
+    const json = await res.json();
 
-    // Fetch all stations in parallel
-    const results = await Promise.all(stations.map(fetchForStation));
-
-    // Merge and sort by timestamp descending
-    const merged = results.flat().sort((a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    );
-
-    // Add serial numbers
-    return merged.map((row, i) => ({
-        sno: i + 1,
-        ...row,
+    const rows = (json.entity as Array<{
+        timestamp: string;
+        station: string;
+        discharge: number;
+        velocity: number;
+        water_level: number;
+    }>).map((row, i) => ({
+        sno: (page - 1) * pageSize + i + 1,
+        timestamp: row.timestamp,
+        river: row.station,
+        discharge: row.discharge.toFixed(2),
+        velocity: row.velocity.toFixed(2),
+        waterLevel: row.water_level.toFixed(2),
     }));
+
+    return { rows, total: json.total ?? rows.length };
 }
 
 /**
@@ -541,7 +535,9 @@ export async function fetchAWSStationNames(): Promise<Array<{ id: string; title:
 
 /**
  * Fetch AWS station time-series report data from the API.
- * Supports multiple stations — fetches each in parallel and merges results.
+ * Single API call. Passes selected station names as query params;
+ * if no stations provided, returns data for all stations.
+ * Returns { rows, total } to support server-side pagination.
  */
 export async function fetchAWSStationReport(
     stations: string[],
@@ -549,58 +545,49 @@ export async function fetchAWSStationReport(
     endTime: string,
     page: number = 1,
     pageSize: number = 100,
-): Promise<Array<Record<string, string | number>>> {
-    const fetchForStation = async (station: string) => {
-        const params = new URLSearchParams({
-            start_time: startTime,
-            end_time: endTime,
-            stations: station,
-            page: String(page),
-            page_size: String(pageSize),
-        });
+): Promise<{ rows: Array<Record<string, string | number>>; total: number }> {
+    const params = new URLSearchParams({
+        start_time: startTime,
+        end_time: endTime,
+        page: String(page),
+        page_size: String(pageSize),
+    });
 
-        const res = await fetch(`/api/external/aws-stations?${params.toString()}`);
-        if (!res.ok) throw new Error(`API returned ${res.status} for station ${station}`);
-        const json = await res.json();
+    // Add each selected station as a separate query param
+    for (const station of stations) {
+        params.append('stations', station);
+    }
 
-        return (json.entity as Array<{
-            timestamp: string;
-            station: string;
-            temperature: number;
-            humidity: number;
-            pressure: number;
-            wind_speed: number;
-            wind_direction: number;
-            rainfall_day: number;
-            rainfall_hour: number;
-            rainfall_total: number;
-        }>).map((row) => ({
-            timestamp: row.timestamp,
-            station: row.station,
-            temperature: row.temperature.toFixed(2),
-            humidity: row.humidity.toFixed(2),
-            pressure: row.pressure.toFixed(2),
-            windSpeed: row.wind_speed.toFixed(2),
-            windDirection: row.wind_direction.toFixed(2),
-            rainfallDay: row.rainfall_day.toFixed(2),
-            rainfallHour: row.rainfall_hour.toFixed(2),
-            rainfallTotal: row.rainfall_total.toFixed(2),
-        }));
-    };
+    const res = await fetch(`/api/external/aws-stations?${params.toString()}`);
+    if (!res.ok) throw new Error(`API returned ${res.status}`);
+    const json = await res.json();
 
-    // Fetch all stations in parallel
-    const results = await Promise.all(stations.map(fetchForStation));
-
-    // Merge and sort by timestamp descending
-    const merged = results.flat().sort((a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    );
-
-    // Add serial numbers
-    return merged.map((row, i) => ({
-        sno: i + 1,
-        ...row,
+    const rows = (json.entity as Array<{
+        timestamp: string;
+        station: string;
+        temperature: number;
+        humidity: number;
+        pressure: number;
+        wind_speed: number;
+        wind_direction: number;
+        rainfall_day: number;
+        rainfall_hour: number;
+        rainfall_total: number;
+    }>).map((row, i) => ({
+        sno: (page - 1) * pageSize + i + 1,
+        timestamp: row.timestamp,
+        station: row.station,
+        temperature: row.temperature.toFixed(2),
+        humidity: row.humidity.toFixed(2),
+        pressure: row.pressure.toFixed(2),
+        windSpeed: row.wind_speed.toFixed(2),
+        windDirection: row.wind_direction.toFixed(2),
+        rainfallDay: row.rainfall_day.toFixed(2),
+        rainfallHour: row.rainfall_hour.toFixed(2),
+        rainfallTotal: row.rainfall_total.toFixed(2),
     }));
+
+    return { rows, total: json.total ?? rows.length };
 }
 
 /**
@@ -636,7 +623,9 @@ export async function fetchRainGaugeStationNames(): Promise<Array<{ id: string; 
 
 /**
  * Fetch rain gauge station time-series report data from the API.
- * This API returns data for ALL stations; we filter client-side by the selected stations.
+ * Single API call. Passes selected station names as query params;
+ * if no stations provided, returns data for all stations.
+ * Returns { rows, total } to support server-side pagination.
  */
 export async function fetchRainGaugeStationReport(
     stations: string[],
@@ -644,7 +633,7 @@ export async function fetchRainGaugeStationReport(
     endTime: string,
     page: number = 1,
     pageSize: number = 100,
-): Promise<Array<Record<string, string | number>>> {
+): Promise<{ rows: Array<Record<string, string | number>>; total: number }> {
     const params = new URLSearchParams({
         start_time: startTime,
         end_time: endTime,
@@ -652,34 +641,27 @@ export async function fetchRainGaugeStationReport(
         page_size: String(pageSize),
     });
 
+    // Add each selected station as a separate query param
+    for (const station of stations) {
+        params.append('stations', station);
+    }
+
     const res = await fetch(`/api/external/rain-gauge-stations/list?${params.toString()}`);
     if (!res.ok) throw new Error(`API returned ${res.status}`);
     const json = await res.json();
 
-    const allRows = (json.entity as Array<{
+    const rows = (json.entity as Array<{
         timestamp: string;
         station: string;
         hour: number;
         total: number;
-    }>).map((row) => ({
+    }>).map((row, i) => ({
+        sno: (page - 1) * pageSize + i + 1,
         timestamp: row.timestamp,
         station: row.station,
         rainfallHour: row.hour.toFixed(2),
         rainfallTotal: row.total.toFixed(2),
     }));
 
-    // Filter by selected stations
-    const stationSet = new Set(stations);
-    const filtered = allRows.filter(row => stationSet.has(row.station));
-
-    // Sort by timestamp descending
-    filtered.sort((a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    );
-
-    // Add serial numbers
-    return filtered.map((row, i) => ({
-        sno: i + 1,
-        ...row,
-    }));
+    return { rows, total: json.total ?? rows.length };
 }

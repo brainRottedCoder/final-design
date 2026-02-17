@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Header, { type TabType } from "./Header";
 import {
   type ReportType,
@@ -30,7 +30,11 @@ export type FetchDataOptions = {
   stationIds: string[];  // All selected station IDs
   start: Date;
   end: Date;
+  page: number;
+  pageSize: number;
 };
+
+export type FetchDataResult = { rows: TableRow[]; total: number };
 
 export type ExportOptions = {
   stationIds: string[];
@@ -40,7 +44,7 @@ export type ExportOptions = {
 
 export type ReportPageProps = {
   config: ReportPageConfig;
-  fetchData: (options: FetchDataOptions) => Promise<TableRow[]> | TableRow[];
+  fetchData: (options: FetchDataOptions) => Promise<FetchDataResult> | FetchDataResult;
   liveStations?: Array<{ id: string; title: string; chartKey: string }>;  // Override station list with live API data
   onExportPdf?: (options: ExportOptions) => Promise<void> | void;
   onExportExcel?: (options: ExportOptions) => Promise<void> | void;
@@ -53,9 +57,8 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
 
   const stations = liveStations ?? getStationsByType(titleConfig.reportType);
 
-  const [selectedIds, setSelectedIds] = useState<string[]>(
-    stations.map((s) => s.id)
-  );
+  const allStationIds = stations.map((s) => s.id);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const [timeRange, setTimeRange] = useState<{ start: Date; end: Date }>(() => {
     const end = new Date();
@@ -71,6 +74,7 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [isExporting, setIsExporting] = useState<'pdf' | 'excel' | null>(null);
   const [exportNotification, setExportNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
@@ -91,42 +95,65 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
       ? 'End time must be after start time.'
       : null;
 
-  // Load data whenever main inputs change
-  useEffect(() => {
-    const load = async () => {
-      if (!selectedIds.length) return;
-      if (timeRangeError) {
-        setTableData([]);
-        return;
-      }
-      setIsLoading(true);
-      setError(null);
-      const stationId = selectedIds[0];
-      try {
-        const data = await Promise.resolve(
-          fetchData({ stationId, stationIds: selectedIds, start: timeRange.start, end: timeRange.end })
-        );
-        setColumns(configColumns);
-        setTableData(data);
-        setSelectedRow(0);
-        setCurrentPage(1);
-        setLastUpdated(new Date());
-      } catch (e: any) {
-        console.error("Failed to load report data", e);
-        setError(e?.message || "Failed to load data. Please try again.");
-        setTableData([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    load();
-  }, [selectedIds, timeRange.start, timeRange.end, fetchData, configColumns, timeRangeError]);
+  // Track which station IDs were used for the last load (for pagination)
+  const activeStationIdsRef = useRef<string[]>([]);
 
-  const totalPages = Math.max(1, Math.ceil(tableData.length / PAGE_SIZE));
-  const paginatedRows = tableData.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
+  // Core data loading function — accepts explicit stationIds
+  const loadData = async (stationIds: string[], page: number) => {
+    if (timeRangeError) {
+      setTableData([]);
+      setTotalRecords(0);
+      return;
+    }
+    activeStationIdsRef.current = stationIds;
+    setIsLoading(true);
+    setError(null);
+    const stationId = stationIds[0] || '';
+    try {
+      const result = await Promise.resolve(
+        fetchData({
+          stationId,
+          stationIds,
+          start: timeRange.start,
+          end: timeRange.end,
+          page,
+          pageSize: PAGE_SIZE,
+        })
+      );
+      setColumns(configColumns);
+      setTableData(result.rows);
+      setTotalRecords(result.total);
+      setSelectedRow(0);
+      setLastUpdated(new Date());
+    } catch (e: any) {
+      console.error("Failed to load report data", e);
+      setError(e?.message || "Failed to load data. Please try again.");
+      setTableData([]);
+      setTotalRecords(0);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Auto-load all data on mount (empty array = all stations)
+  const mountedRef = useRef(false);
+  useEffect(() => {
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      loadData([], 1);
+    }
+  }, []);
+
+  // When pagination changes, re-fetch with the same station set
+  const prevPageRef = useRef(currentPage);
+  useEffect(() => {
+    if (mountedRef.current && currentPage !== prevPageRef.current) {
+      prevPageRef.current = currentPage;
+      loadData(activeStationIdsRef.current, currentPage);
+    }
+  }, [currentPage]);
+
+  const totalPages = Math.max(1, Math.ceil(totalRecords / PAGE_SIZE));
 
   const handleTabChange = (tab: TabType | string) => {
     const newTab = tab as TabType;
@@ -135,15 +162,11 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
     }
   };
 
+  // Generate Report: call API only for selected stations (empty = all)
   const handleGenerateClick = () => {
-    console.log(
-      `Generate ${config.id} report for`,
-      selectedIds,
-      "from",
-      timeRange.start,
-      "to",
-      timeRange.end
-    );
+    setCurrentPage(1);
+    prevPageRef.current = 1;
+    loadData(selectedIds, 1);
   };
 
   const handleExportPdf = async () => {
@@ -185,8 +208,8 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
       {exportNotification && (
         <div
           className={`fixed top-4 right-4 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg border transition-all animate-[slideIn_0.3s_ease-out] ${exportNotification.type === 'success'
-              ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-              : 'bg-red-50 border-red-200 text-red-800'
+            ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+            : 'bg-red-50 border-red-200 text-red-800'
             }`}
         >
           {exportNotification.type === 'success' ? (
@@ -335,9 +358,9 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
                     type="button"
                     onClick={handleGenerateClick}
                     disabled={!!timeRangeError}
-                    className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs 2xl:text-sm font-semibold text-white shadow-md ${timeRangeError ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}`}
+                    className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs 2xl:text-sm font-semibold text-white shadow-md cursor-pointer ${timeRangeError ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}`}
                   >
-                    <span className={`inline-flex h-1.5 w-1.5 rounded-full ${timeRangeError ? 'bg-gray-300' : 'bg-emerald-300'}`} />
+                    <span className={`inline-flex h-1.5 w-1.5 rounded-full ${timeRangeError ? 'bg-gray-300' : 'bg-emerald-300 '}`} />
                     Generate Report
                   </button>
                   <div className="flex gap-1.5">
@@ -345,7 +368,7 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
                       type="button"
                       onClick={handleExportPdf}
                       disabled={!!timeRangeError || isExporting === 'pdf'}
-                      className={`inline-flex flex-1 items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] 2xl:text-xs font-semibold ${timeRangeError || isExporting === 'pdf' ? 'text-gray-400 bg-gray-50 border border-gray-200 cursor-not-allowed' : 'text-rose-700 bg-rose-50 border border-rose-200 hover:bg-rose-100'}`}
+                      className={` cursor-pointer inline-flex flex-1 items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] 2xl:text-xs font-semibold ${timeRangeError || isExporting === 'pdf' ? 'text-gray-400 bg-gray-50 border border-gray-200 cursor-not-allowed' : 'text-rose-700 bg-rose-50 border border-rose-200 hover:bg-rose-100'}`}
                     >
                       {isExporting === 'pdf' ? (
                         <><svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> Downloading...</>
@@ -355,7 +378,7 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
                       type="button"
                       onClick={handleExportExcel}
                       disabled={!!timeRangeError || isExporting === 'excel'}
-                      className={`inline-flex flex-1 items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] 2xl:text-xs font-semibold ${timeRangeError || isExporting === 'excel' ? 'text-gray-400 bg-gray-50 border border-gray-200 cursor-not-allowed' : 'text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100'}`}
+                      className={` cursor-pointer inline-flex flex-1 items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] 2xl:text-xs font-semibold ${timeRangeError || isExporting === 'excel' ? 'text-gray-400 bg-gray-50 border border-gray-200 cursor-not-allowed' : 'text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100'}`}
                     >
                       {isExporting === 'excel' ? (
                         <><svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> Downloading...</>
@@ -438,9 +461,9 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedRows.map((row, index) => (
+                  {tableData.map((row, index) => (
                     <tr
-                      key={row.id ?? `${index}`}
+                      key={index}
                       onClick={() => setSelectedRow(index)}
                       className="cursor-pointer transition-colors"
                       style={{
@@ -477,19 +500,26 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
                 <span className="inline-flex h-2 w-2 rounded-full bg-indigo-500" />
                 <span>
                   Showing{" "}
-                  <span className="font-semibold">{paginatedRows.length}</span> of{" "}
-                  <span className="font-semibold">{tableData.length}</span> records
-                  for{" "}
-                  <span className="font-semibold">{selectedIds.length}</span>{" "}
-                  selected station{selectedIds.length === 1 ? "" : "s"}
+                  <span className="font-semibold">{tableData.length}</span> of{" "}
+                  <span className="font-semibold">{totalRecords}</span> records
+                  {selectedIds.length > 0 && (
+                    <>
+                      {" "}for{" "}
+                      <span className="font-semibold">{selectedIds.length}</span>{" "}
+                      selected station{selectedIds.length === 1 ? "" : "s"}
+                    </>
+                  )}
+                  {selectedIds.length === 0 && (
+                    <> (all stations)</>
+                  )}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-[11px] 2xl:text-xs">
                 <button
                   type="button"
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className={`px-2.5 py-1 rounded-md border text-xs font-semibold transition-colors ${currentPage === 1
+                  disabled={currentPage === 1 || isLoading}
+                  className={`px-2.5 py-1 rounded-md border text-xs font-semibold transition-colors ${currentPage === 1 || isLoading
                     ? "border-gray-200 text-gray-300 cursor-not-allowed"
                     : "border-gray-300 text-gray-700 hover:bg-white"
                     }`}
@@ -498,24 +528,13 @@ export default function ReportPage({ config, fetchData, liveStations, onExportPd
                 </button>
                 <span className="px-2 text-gray-700">
                   Page <span className="font-semibold">{currentPage}</span> of{" "}
-                  <span className="font-semibold">
-                    {Math.max(1, Math.ceil(tableData.length / PAGE_SIZE))}
-                  </span>
+                  <span className="font-semibold">{totalPages}</span>
                 </span>
                 <button
                   type="button"
-                  onClick={() =>
-                    setCurrentPage((p) =>
-                      Math.min(
-                        Math.max(1, Math.ceil(tableData.length / PAGE_SIZE)),
-                        p + 1
-                      )
-                    )
-                  }
-                  disabled={
-                    currentPage === Math.max(1, Math.ceil(tableData.length / PAGE_SIZE))
-                  }
-                  className={`px-2.5 py-1 rounded-md border text-xs font-semibold transition-colors ${currentPage === Math.max(1, Math.ceil(tableData.length / PAGE_SIZE))
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage >= totalPages || isLoading}
+                  className={`px-2.5 py-1 rounded-md border text-xs font-semibold transition-colors ${currentPage >= totalPages || isLoading
                     ? "border-gray-200 text-gray-300 cursor-not-allowed"
                     : "border-gray-300 text-gray-700 hover:bg-white"
                     }`}
