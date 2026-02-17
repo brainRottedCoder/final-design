@@ -494,9 +494,9 @@ export async function fetchDischargeStationReport(
         sno: (page - 1) * pageSize + i + 1,
         timestamp: row.timestamp,
         river: row.station,
-        discharge: row.discharge.toFixed(2),
-        velocity: row.velocity.toFixed(2),
-        waterLevel: row.water_level.toFixed(2),
+        discharge: (row.discharge ?? 0).toFixed(2),
+        velocity: (row.velocity ?? 0).toFixed(2),
+        waterLevel: (row.water_level ?? 0).toFixed(2),
     }));
 
     return { rows, total: json.total ?? rows.length };
@@ -659,8 +659,8 @@ export async function fetchRainGaugeStationReport(
         sno: (page - 1) * pageSize + i + 1,
         timestamp: row.timestamp,
         station: row.station,
-        rainfallHour: row.hour.toFixed(2),
-        rainfallTotal: row.total.toFixed(2),
+        rainfallHour: (row.hour ?? 0).toFixed(2),
+        rainfallTotal: (row.total ?? 0).toFixed(2),
     }));
 
     return { rows, total: json.total ?? rows.length };

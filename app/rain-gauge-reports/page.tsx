@@ -36,7 +36,6 @@ async function fetchRainGaugeData({
   page,
   pageSize,
 }: {
-  stationId: string;
   stationIds: string[];
   start: Date;
   end: Date;
