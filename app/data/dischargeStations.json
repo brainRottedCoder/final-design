@@ -4,6 +4,7 @@
         {
             "id": "ds-001",
             "title": "Syana Chatti Yamuna River",
+            "riverName": "Syana Chatti Yamuna",
             "chartKey": "SCYR",
             "discharge": "03",
             "velocity": "03",
@@ -13,6 +14,7 @@
         {
             "id": "ds-002",
             "title": "Ganga River",
+            "riverName": "Ganga",
             "chartKey": "GR",
             "discharge": "03",
             "velocity": "03",
@@ -22,6 +24,7 @@
         {
             "id": "ds-003",
             "title": "Satluj River",
+            "riverName": "Satluj",
             "chartKey": "Sr",
             "discharge": "03",
             "velocity": "03",
@@ -31,6 +34,7 @@
         {
             "id": "ds-004",
             "title": "Brahmaputra River",
+            "riverName": "Brahmaputra",
             "chartKey": "Br",
             "discharge": "03",
             "velocity": "03",
@@ -40,6 +44,7 @@
         {
             "id": "ds-005",
             "title": "Indus River",
+            "riverName": "Indus",
             "chartKey": "InR",
             "discharge": "03",
             "velocity": "03",
@@ -49,6 +54,7 @@
         {
             "id": "ds-006",
             "title": "Jamuna River",
+            "riverName": "Jamuna",
             "chartKey": "JR",
             "discharge": "03",
             "velocity": "03",
@@ -58,6 +64,7 @@
         {
             "id": "ds-007",
             "title": "Kosi River",
+            "riverName": "Kosi",
             "chartKey": "Ko",
             "discharge": "03",
             "velocity": "03",
@@ -67,6 +74,7 @@
         {
             "id": "ds-008",
             "title": "Kaveri River",
+            "riverName": "Kaveri",
             "chartKey": "Kv",
             "discharge": "03",
             "velocity": "03",

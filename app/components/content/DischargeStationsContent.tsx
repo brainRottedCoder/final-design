@@ -77,6 +77,7 @@ export default function DischargeStationsContent({ onStationSelect, selectedChar
                     <StationCard
                         key={station.id}
                         title={station.title}
+                        riverName={station.riverName}
                         discharge={station.discharge}
                         velocity={station.velocity}
                         waterLevel={station.waterLevel}

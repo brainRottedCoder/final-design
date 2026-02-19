@@ -3,14 +3,14 @@
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 
-export type TabType = 'overview' | 'discharge' | 'weather' | 'rain-gauge' | 'map';
+export type TabType = 'overview' | 'discharge' | 'weather' | 'rain-gauge' | 'map' | 'dam';
 
 const tabs: { id: TabType; label: string; path: string }[] = [
-  { id: 'overview',   label: 'Overview',                  path: '/overview' },
-  { id: 'discharge',  label: 'Discharge Station',         path: '/station-data' },
-  { id: 'weather',    label: 'Automatic Weather Station', path: '/automatic-weather' },
-  { id: 'rain-gauge', label: 'Rain Gauge Station',        path: '/rain-gauge-reports' },
-  { id: 'map',        label: 'Map',                       path: '/map' },
+  { id: 'overview', label: 'Overview', path: '/overview' },
+  { id: 'discharge', label: 'Discharge Station', path: '/station-data' },
+  { id: 'weather', label: 'Automatic Weather Station', path: '/automatic-weather' },
+  { id: 'rain-gauge', label: 'Rain Gauge Station', path: '/rain-gauge-reports' },
+  { id: 'map', label: 'Map', path: '/map' },
 ];
 
 interface HeaderProps {
@@ -51,11 +51,10 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
               <button
                 key={tab.id}
                 onClick={() => handleTabClick(tab.id)}
-                className={`px-6 2xl:px-8 py-2.5 2xl:py-3.5 text-sm 2xl:text-lg cursor-pointer font-semibold rounded-md 2xl:rounded-lg border-2 transition-all ${
-                  isActive
-                    ? 'bg-white text-purple-700 border-purple-500 shadow-sm'
-                    : 'bg-white text-gray-400 border-transparent hover:border-gray-300 hover:text-gray-500'
-                }`}
+                className={`px-6 2xl:px-8 py-2.5 2xl:py-3.5 text-sm 2xl:text-lg cursor-pointer font-semibold rounded-md 2xl:rounded-lg border-2 transition-all ${isActive
+                  ? 'bg-white text-purple-700 border-purple-500 shadow-sm'
+                  : 'bg-white text-gray-400 border-transparent hover:border-gray-300 hover:text-gray-500'
+                  }`}
               >
                 {tab.label}
               </button>

@@ -13,6 +13,8 @@ import AutomaticWeatherContent from '../components/content/AutomaticWeatherConte
 import RainGaugeContent from '../components/content/RainGaugeContent';
 import WeatherStatistics from '../components/content/WeatherStatistics';
 import RainGaugeStatistics from '../components/content/RainGaugeStatistics';
+import DamContent from '../components/content/DamContent';
+import DamStatistics from '../components/content/DamStatistics';
 import { fetchAllDashboardData, type AllDashboardData } from '../services/dataService';
 import { useAutoLoop } from '../hooks/useAutoLoop';
 
@@ -23,6 +25,7 @@ const TAB_LABELS: Record<TabType, string> = {
     'discharge': 'Discharge Stations',
     'weather': 'Automatic Weather Stations',
     'rain-gauge': 'Rain Gauge Stations',
+    'dam': 'Dam',
     'map': 'Map',
 };
 
@@ -33,12 +36,14 @@ function OverviewContent() {
         chartKeys: [],
         titles: []
     });
+    const [selectedDamMetrics, setSelectedDamMetrics] = useState<string[]>([]);
     const [selectedParameters, setSelectedParameters] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isTabLoading, setIsTabLoading] = useState(false);
     const [data, setData] = useState<AllDashboardData | null>(null);
     const [apiError, setApiError] = useState<string | null>(null);
 
+    // ... handleTabChange ...
     // Fetch data — used for both initial load and polling
     const loadData = useCallback(async (isInitial: boolean) => {
         if (isInitial) setIsLoading(true);
@@ -49,8 +54,6 @@ function OverviewContent() {
         } catch (error: any) {
             console.error('Failed to load dashboard data:', error);
             setApiError(error?.message || 'Data not received – API failed');
-            // On initial load with error, keep data null so skeleton doesn't show stale data
-            // On polling with error, keep existing data so UI doesn't blank out
         } finally {
             if (isInitial) setIsLoading(false);
         }
@@ -59,12 +62,10 @@ function OverviewContent() {
     // Initial fetch + 5-minute polling
     useEffect(() => {
         loadData(true);
-
-        const POLL_INTERVAL = 5 * 60 * 1000; // 5 minutes
+        const POLL_INTERVAL = 5 * 60 * 1000;
         const intervalId = setInterval(() => {
             loadData(false);
         }, POLL_INTERVAL);
-
         return () => clearInterval(intervalId);
     }, [loadData]);
 
@@ -86,6 +87,7 @@ function OverviewContent() {
             // Reset station and parameter selection when changing tabs
             setSelectedStations({ chartKeys: [], titles: [] });
             setSelectedParameters([]);
+            setSelectedDamMetrics([]); // Reset dam metrics too
             // Trigger loading for tab content
             setIsTabLoading(true);
             setTimeout(() => {
@@ -96,9 +98,9 @@ function OverviewContent() {
 
     // Auto-loop hook for large screens
     const { isLooping, isLargeScreen, timeUntilLoop } = useAutoLoop({
-        inactivityTimeout: 30000, // 30 seconds inactivity
-        tabDuration: 30000, // 30 seconds per tab
-        minScreenWidth: 2500, // ~55" screens
+        inactivityTimeout: 30000,
+        tabDuration: 30000,
+        minScreenWidth: 2500,
         tabs: LOOP_TABS,
         onTabChange: handleTabChange,
         currentTab: activeTab,
@@ -107,14 +109,11 @@ function OverviewContent() {
     // Determine which metric card should be active based on tab
     const getActiveMetric = () => {
         switch (activeTab) {
-            case 'discharge':
-                return 'discharge';
-            case 'weather':
-                return 'weather';
-            case 'rain-gauge':
-                return 'rain-gauge';
-            default:
-                return 'discharge'; // Overview shows discharge as primary
+            case 'discharge': return 'discharge';
+            case 'weather': return 'weather';
+            case 'rain-gauge': return 'rain-gauge';
+            case 'dam': return 'dam';
+            default: return 'discharge';
         }
     };
 
@@ -123,21 +122,17 @@ function OverviewContent() {
     // Handle station selection (toggle for multi-select)
     const handleStationSelect = (chartKey: string | null, title: string | null) => {
         if (!chartKey || !title) {
-            // Clear all selections if null passed
             setSelectedStations({ chartKeys: [], titles: [] });
             return;
         }
-
         setSelectedStations(prev => {
             const keyIndex = prev.chartKeys.indexOf(chartKey);
             if (keyIndex > -1) {
-                // Remove if already selected
                 return {
                     chartKeys: prev.chartKeys.filter(k => k !== chartKey),
                     titles: prev.titles.filter((_, i) => i !== keyIndex)
                 };
             } else {
-                // Add to selection
                 return {
                     chartKeys: [...prev.chartKeys, chartKey],
                     titles: [...prev.titles, title]
@@ -193,6 +188,18 @@ function OverviewContent() {
                     onClearAll={() => setSelectedStations({ chartKeys: [], titles: [] })}
                     stationsData={data?.rainGaugeStations}
                 />;
+            case 'dam':
+                return <DamContent
+                    data={data?.damStation!}
+                    onMetricSelect={(metric) => {
+                        setSelectedDamMetrics(prev =>
+                            prev.includes(metric)
+                                ? prev.filter(m => m !== metric)
+                                : [...prev, metric]
+                        );
+                    }}
+                    selectedMetrics={selectedDamMetrics}
+                />;
             case 'discharge':
             case 'overview':
             default:
@@ -213,9 +220,9 @@ function OverviewContent() {
             const cols = activeTab === 'weather' ? 3 : 1;
 
             return (
-                <div className="flex flex-col min-h-0 h-full ">
+                <div className="flex flex-col min-h-0 h-full">
                     <div className="h-6 2xl:h-8 w-32 bg-gray-300 rounded mb-2 2xl:mb-3 animate-pulse" />
-                    <div className={`grid gap-2 2xl:gap-3 flex-1 `}
+                    <div className={`grid gap-2 2xl:gap-3 flex-1`}
                         style={{
                             gridTemplateColumns: `repeat(${cols}, 1fr)`,
                             gridTemplateRows: `repeat(${Math.ceil(chartCount / cols)}, 1fr)`
@@ -245,6 +252,10 @@ function OverviewContent() {
                 selectedTitles={selectedStations.titles}
                 statisticsData={data?.rainGaugeStatistics}
             />;
+        }
+
+        if (activeTab === 'dam') {
+            return <DamStatistics data={data?.damStatistics!} selectedMetrics={selectedDamMetrics} />;
         }
 
         const statisticsData = data.dischargeStatistics;
@@ -297,8 +308,8 @@ function OverviewContent() {
         { id: 'discharge', title: 'Discharge Stations', value: '--', clickable: true },
         { id: 'weather', title: 'Automatic Weather Stations', value: '--', clickable: true },
         { id: 'rain-gauge', title: 'Rain Gauge Stations', value: '--', clickable: true },
-        { id: 'juddo-pond', title: 'Juddo Pond Level', value: '--', clickable: false },
-        { id: 'juddo-forebay', title: 'Juddo Forebay Level', value: '--', clickable: false },
+        { id: 'dam', title: 'Dam', value: '--', clickable: true },
+        { id: 'vyasi-dam-level', title: 'Vyasi Dam Level', value: '--', clickable: false },
     ];
     const lastUpdated = data?.dashboard.lastUpdated ?? { date: '--', time: '--' };
 

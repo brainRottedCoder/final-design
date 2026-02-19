@@ -105,15 +105,15 @@ export default function WeatherStationCard({
                     } ${isDimmed ? 'opacity-40' : ''}`}
                 onClick={(e) => handleParameterClick(e, paramKey)}
             >
-                <span className="text-xs 2xl:text-sm font-semibold text-white/85 leading-tight truncate">{label} {unit}</span>
-                <span className="text-lg 2xl:text-xl font-bold text-white leading-tight truncate">{values[paramKey]}</span>
+                <span className="text-[10px] 2xl:text-xs font-semibold text-white/85 leading-tight truncate">{label} {unit}</span>
+                <span className="text-base 2xl:text-lg font-bold text-white leading-tight truncate">{values[paramKey]}</span>
             </div>
         );
     };
 
     return (
         <div
-            className={`rounded-[12px] 2xl:rounded-[18px] px-2.5 2xl:px-3 py-2 2xl:py-2.5 h-full flex flex-col overflow-hidden transition-all cursor-pointer ${isSelected ? 'scale-[1.01]' : 'hover:scale-[1.005]'}`}
+            className={`rounded-[12px] 2xl:rounded-[18px] px-2 2xl:px-3 py-1 2xl:py-1.5 h-full flex flex-col overflow-hidden transition-all cursor-pointer ${isSelected ? 'ring-2 ring-offset-1 ring-blue-400' : ''}`}
             style={{
                 background: config.bg,
                 boxShadow: isSelected
@@ -123,15 +123,15 @@ export default function WeatherStationCard({
             }}
             onClick={onClick}
         >
-            <div className="flex items-center justify-center mb-1 2xl:mb-2 border-1 border-white bg-white rounded-lg">
+            <div className="flex items-center justify-center mb-0.5 2xl:mb-1 border-1 border-white bg-white rounded-lg">
                 <h3
-                    className="text-md 2xl:text-xl px-3 2xl:px-4 py-0.5 2xl:py-1 rounded-lg 2xl:rounded-xl font-bold text-gray-800 truncate"
+                    className="text-sm 2xl:text-lg px-3 2xl:px-4 py-0.5 2xl:py-0.5 rounded-lg 2xl:rounded-xl font-bold text-gray-800 truncate"
                 >
                     {title}
                 </h3>
             </div>
 
-            <div className="grid grid-cols-3 gap-x-1 gap-y-0.5 2xl:gap-x-3 2xl:gap-y-1.5 flex-1 content-center min-h-0 overflow-hidden">
+            <div className="grid grid-cols-3 gap-x-1 gap-y-0.5 2xl:gap-x-3 2xl:gap-y-1 flex-1 content-center min-h-0 overflow-hidden">
                 {/* Column 1 */}
                 <div className="flex flex-col gap-0.5 min-w-0">
                     {renderParameter('windSpeed', 'Wind Spd', '(m/s)')}

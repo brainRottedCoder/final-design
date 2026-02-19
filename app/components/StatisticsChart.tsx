@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 interface StatisticsChartProps {
   title: string;
   unit?: string;
-  data: { name: string; value: number }[];
+  data: { name: string; value: number; color?: string }[];
   maxValue: number;
   highlightedKeys?: string[];
   labelColor?: string;
@@ -31,8 +31,8 @@ const defaultUnits: Record<string, string> = {
   'Rainfall - Total (mm)': 'mm',
 };
 
-export default function StatisticsChart({ title, unit, data, maxValue, highlightedKeys = [] }: StatisticsChartProps) {
-  const pillColor = labelColors[title] || labelColors[title.split(' (')[0]] || '#8ac53e';
+export default function StatisticsChart({ title, unit, data, maxValue, highlightedKeys = [], labelColor }: StatisticsChartProps) {
+  const pillColor = labelColor || labelColors[title] || labelColors[title.split(' (')[0]] || '#8ac53e';
   const chartUnit = unit || defaultUnits[title] || defaultUnits[title.split(' (')[0]] || '';
   const hasSelection = highlightedKeys.length > 0;
   // Remove all non-alphanumeric characters for valid SVG gradient ID
@@ -118,7 +118,7 @@ export default function StatisticsChart({ title, unit, data, maxValue, highlight
                 return (
                   <Cell
                     key={`cell-${index}`}
-                    fill={isHighlighted ? `url(#purpleGradient-${safeId})` : `url(#dimmedGradient-${safeId})`}
+                    fill={isHighlighted ? (entry.color || `url(#purpleGradient-${safeId})`) : `url(#dimmedGradient-${safeId})`}
                     opacity={isHighlighted ? 1 : 0.5}
                   />
                 );

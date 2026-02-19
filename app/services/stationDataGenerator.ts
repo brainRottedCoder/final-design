@@ -5,7 +5,7 @@ import dischargeStations from '../data/dischargeStations.json';
 import weatherStations from '../data/weatherStations.json';
 import rainGaugeStations from '../data/rainGaugeStations.json';
 
-export type ReportType = 'discharge' | 'aws' | 'rain-gauge';
+export type ReportType = 'discharge' | 'aws' | 'rain-gauge' | 'vyasi-dam';
 export type TimeTab = 'Minute' | 'Hour' | 'Day' | 'Week' | 'Month' | 'Year' | 'All';
 
 export interface Station {
@@ -51,6 +51,8 @@ export function getStationsByType(type: ReportType): Station[] {
                 title: s.title,
                 chartKey: s.chartKey
             }));
+        case 'vyasi-dam':
+            return [{ id: 'vyasi-dam', title: 'Vyasi Dam', chartKey: 'VD' }];
     }
 }
 
@@ -90,6 +92,13 @@ export function getColumnsByType(type: ReportType, stationName: string): TableCo
                 { key: 'rainfallTotal', label: `${prefix}_Rainfall_Total`, align: 'center' },
                 { key: 'rainfallDay', label: `${prefix}_Rainfall_Day`, align: 'center' },
                 { key: 'intensity', label: `${prefix}_Intensity`, align: 'center' },
+            ];
+        case 'vyasi-dam':
+            return [
+                ...baseColumns,
+                { key: 'damLevel', label: `${prefix}_DamLevel`, align: 'center' },
+                { key: 'waterFlow', label: `${prefix}_WaterFlow`, align: 'center' },
+                { key: 'reservoirCapacity', label: `${prefix}_ReservoirCapacity`, align: 'center' },
             ];
     }
 }
@@ -235,6 +244,11 @@ export function generateStationData(
                 baseRow.rainfallDay = (randomFactor * 30).toFixed(2);
                 baseRow.intensity = (randomFactor * 20).toFixed(2);
                 break;
+            case 'vyasi-dam':
+                baseRow.damLevel = (4.0 + randomFactor * 0.5).toFixed(2);
+                baseRow.waterFlow = (150 + randomFactor * 50).toFixed(2);
+                baseRow.reservoirCapacity = (75 + randomFactor * 10).toFixed(1);
+                break;
         }
 
         data.push(baseRow);
@@ -249,5 +263,6 @@ export function getReportTypeName(type: ReportType): string {
         case 'discharge': return 'Discharge';
         case 'aws': return 'AWS';
         case 'rain-gauge': return 'Rain Gauge';
+        case 'vyasi-dam': return 'Vyasi Dam';
     }
 }

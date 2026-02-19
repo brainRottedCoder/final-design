@@ -13,6 +13,8 @@ import type {
     StatisticsData,
     WeatherStatisticsData,
     RainGaugeStatisticsData,
+    DamStation,
+    DamStatisticsData,
 } from '../types';
 
 // Import JSON data
@@ -109,8 +111,8 @@ export interface OverviewSummaryResponse {
         discharge_stations: number;
         aws: number;
         rain_gauge_stations: number;
-        juddo_pond_level: number;
-        juddo_forbay_level: number;
+        dam: number;
+        vyasi_dam_level: number;
     };
 }
 
@@ -132,8 +134,8 @@ export async function fetchOverviewSummary(): Promise<DashboardData> {
                 { id: 'discharge', title: 'Discharge Stations', value: pad(json.entity.discharge_stations), clickable: true },
                 { id: 'weather', title: 'Automatic Weather Stations', value: pad(json.entity.aws), clickable: true },
                 { id: 'rain-gauge', title: 'Rain Gauge Stations', value: pad(json.entity.rain_gauge_stations), clickable: true },
-                { id: 'juddo-pond', title: 'Juddo Pond Level', value: pad(json.entity.juddo_pond_level), clickable: false },
-                { id: 'juddo-forebay', title: 'Juddo Forebay Level', value: pad(json.entity.juddo_forbay_level), clickable: false },
+                { id: 'dam', title: 'Dam', value: pad(json.entity.dam), clickable: true },
+                { id: 'vyasi-dam-level', title: 'Vyasi Dam Level', value: pad(json.entity.vyasi_dam_level), clickable: false },
             ],
             lastUpdated: {
                 date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }),
@@ -171,9 +173,13 @@ export async function fetchDischargeStationsFromAPI(): Promise<DischargeStations
                 .map((w: string) => w[0]?.toUpperCase() ?? '')
                 .join('');
 
+            // Extract river name (remove "River" suffix if present)
+            const riverName = s.name.replace(/\s+River$/i, '').trim();
+
             return {
                 id: `ds-${String(i + 1).padStart(3, '0')}`,
                 title: s.name,
+                riverName,
                 chartKey,
                 discharge: s.discharge.toFixed(2),
                 velocity: s.velocity.toFixed(2),
@@ -287,6 +293,67 @@ export async function fetchRainGaugesFromAPI(): Promise<RainGaugeStationsData> {
     }
 }
 
+// ===== DAM DATA FETCH =====
+
+export async function fetchDamStation(): Promise<DamStation> {
+    await delay(API_DELAY);
+    return {
+        id: 'dam-1',
+        title: 'Vyasi Dam',
+        headLoss: '0.45',
+        intechLevel: '120.5',
+        levelPier1: '450.2',
+        levelPier6: '448.8',
+    };
+}
+
+export async function fetchDamStatistics(): Promise<DamStatisticsData> {
+    await delay(API_DELAY);
+
+    // Generate current values for combined comparison chart
+    const currentHeadLoss = 0.4 + Math.random() * 0.2;
+    const currentIntechLevel = 120 + Math.random() * 5;
+    const currentLevelPier1 = 450 + Math.random() * 2;
+    const currentLevelPier6 = 448 + Math.random() * 2;
+    const maxCombinedValue = Math.max(currentIntechLevel, currentLevelPier1, currentLevelPier6) * 1.2;
+
+    return {
+        sectionTitle: 'Dam Statistics',
+        charts: {
+            headLoss: {
+                title: 'Head Loss (m)',
+                data: Array.from({ length: 24 }, (_, i) => ({ name: `${i}:00`, value: 0.4 + Math.random() * 0.2 })),
+                maxValue: 1
+            },
+            intechLevel: {
+                title: 'Intech Level (m)',
+                data: Array.from({ length: 24 }, (_, i) => ({ name: `${i}:00`, value: 120 + Math.random() * 5 })),
+                maxValue: 150
+            },
+            levelPier1: {
+                title: 'Level Pier 1 (m)',
+                data: Array.from({ length: 24 }, (_, i) => ({ name: `${i}:00`, value: 450 + Math.random() * 2 })),
+                maxValue: 460
+            },
+            levelPier6: {
+                title: 'Level Pier 6 (m)',
+                data: Array.from({ length: 24 }, (_, i) => ({ name: `${i}:00`, value: 448 + Math.random() * 2 })),
+                maxValue: 460
+            },
+            combined: {
+                title: 'Dam Levels Comparison',
+                data: [
+                    { name: 'Head Loss', value: parseFloat(currentHeadLoss.toFixed(2)) },
+                    { name: 'Intech Level', value: parseFloat(currentIntechLevel.toFixed(2)) },
+                    { name: 'Level Pier 1', value: parseFloat(currentLevelPier1.toFixed(2)) },
+                    { name: 'Level Pier 6', value: parseFloat(currentLevelPier6.toFixed(2)) },
+                ],
+                maxValue: Math.ceil(maxCombinedValue)
+            },
+        }
+    };
+}
+
 // ===== ALL DATA FETCH (single call for initial load) =====
 
 export interface AllDashboardData {
@@ -297,6 +364,8 @@ export interface AllDashboardData {
     dischargeStatistics: StatisticsData;
     weatherStatistics: WeatherStatisticsData;
     rainGaugeStatistics: RainGaugeStatisticsData;
+    damStation: DamStation;
+    damStatistics: DamStatisticsData;
 }
 
 /**
@@ -307,10 +376,14 @@ function buildDischargeStatisticsFromStations(stations: DischargeStationsData): 
     const stationList = stations.stations;
 
     const buildChart = (title: string, getValue: (s: typeof stationList[0]) => number) => {
-        const data = stationList.map(s => ({
-            name: s.chartKey,
-            value: parseFloat(getValue(s).toString()),
-        }));
+        const data = stationList.map(s => {
+            // Use riverName if available, otherwise fall back to title
+            const riverName = s.riverName || s.title.replace(/\s+River$/i, '').trim();
+            return {
+                name: riverName,
+                value: parseFloat(getValue(s).toString()),
+            };
+        });
         const maxVal = Math.max(...data.map(d => d.value));
         return {
             title,
@@ -396,11 +469,13 @@ function buildRainGaugeStatisticsFromStations(stations: RainGaugeStationsData): 
 
 export async function fetchAllDashboardData(): Promise<AllDashboardData> {
     // Fetch all live API data in parallel
-    const [liveDashboard, liveDischargeStations, liveWeatherStations, liveRainGaugeStations] = await Promise.all([
+    const [liveDashboard, liveDischargeStations, liveWeatherStations, liveRainGaugeStations, liveDamStation, liveDamStatistics] = await Promise.all([
         fetchOverviewSummary(),
         fetchDischargeStationsFromAPI(),
         fetchAWSFromAPI(),
         fetchRainGaugesFromAPI(),
+        fetchDamStation(),
+        fetchDamStatistics(),
         delay(API_DELAY),
     ]);
 
@@ -417,6 +492,8 @@ export async function fetchAllDashboardData(): Promise<AllDashboardData> {
         dischargeStatistics: liveDischargeStatistics,
         weatherStatistics: liveWeatherStatistics,
         rainGaugeStatistics: liveRainGaugeStatistics,
+        damStation: liveDamStation,
+        damStatistics: liveDamStatistics,
     };
 }
 

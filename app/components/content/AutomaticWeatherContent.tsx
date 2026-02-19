@@ -66,7 +66,7 @@ export default function AutomaticWeatherContent({
 
     return (
         <div className="flex flex-col min-h-0 h-full overflow-hidden">
-            <div className="flex items-center justify-between mb-1.5 2xl:mb-2 flex-shrink-0">
+            <div className="flex items-center justify-between mb-1 2xl:mb-1.5 flex-shrink-0">
                 <h2 className="text-xl 2xl:text-2xl font-bold" style={{ color: '#303030' }}>
                     {data.sectionTitle}
                 </h2>
@@ -84,26 +84,27 @@ export default function AutomaticWeatherContent({
                     </button>
                 )}
             </div>
-            <div className="flex flex-col gap-1.5 2xl:gap-2 flex-1 justify-between">
+            <div className="flex flex-col gap-1 2xl:gap-1.5 flex-1 overflow-hidden pb-1">
                 {data.stations.map((station) => (
-                    <WeatherStationCard
-                        key={station.id}
-                        title={station.title}
-                        windSpeed={station.windSpeed}
-                        windDirection={station.windDirection}
-                        temperature={station.temperature}
-                        relativeHumidity={station.relativeHumidity}
-                        airPressure={station.airPressure}
-                        solarRadiation={station.solarRadiation}
-                        rainfallHR={station.rainfallHR}
-                        rainfallDay={station.rainfallDay}
-                        rainfallTotal={station.rainfallTotal}
-                        color={station.color as 'blue' | 'green' | 'orange'}
-                        isSelected={selectedIds.includes(station.id)}
-                        selectedParameters={selectedParameters}
-                        onClick={() => handleCardClick(station.id, station.chartKey, station.title)}
-                        onParameterSelect={handleParameterSelect}
-                    />
+                    <div key={station.id} className="flex-1 min-h-0">
+                        <WeatherStationCard
+                            title={station.title}
+                            windSpeed={station.windSpeed}
+                            windDirection={station.windDirection}
+                            temperature={station.temperature}
+                            relativeHumidity={station.relativeHumidity}
+                            airPressure={station.airPressure}
+                            solarRadiation={station.solarRadiation}
+                            rainfallHR={station.rainfallHR}
+                            rainfallDay={station.rainfallDay}
+                            rainfallTotal={station.rainfallTotal}
+                            color={station.color as 'blue' | 'green' | 'orange'}
+                            isSelected={selectedIds.includes(station.id)}
+                            selectedParameters={selectedParameters}
+                            onClick={() => handleCardClick(station.id, station.chartKey, station.title)}
+                            onParameterSelect={handleParameterSelect}
+                        />
+                    </div>
                 ))}
             </div>
         </div>
