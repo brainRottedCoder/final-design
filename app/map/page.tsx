@@ -8,26 +8,27 @@ import { useMemo, useState } from 'react';
 const StationsMap = dynamic(() => import('../components/StationsMap'), { ssr: false });
 
 const STATIONS: Station[] = [
-  { type: 'Discharge', name: 'SyanaChatti', lat: 30.905956, lon: 78.360214 },
-  { type: 'Discharge', name: 'Kisala (Barkot)', lat: 30.855556, lon: 78.285578 },
-  { type: 'Discharge', name: 'Kharadi', lat: 30.821142, lon: 78.235703 },
-  { type: 'Discharge', name: 'Thadung Purola', lat: 30.832161, lon: 78.097931 },
-  { type: 'Discharge', name: 'Aglad', lat: 30.514358, lon: 77.999603 },
-  { type: 'Discharge', name: 'Bhediyana Disc', lat: 30.509967, lon: 77.983458 },
-  { type: 'Discharge', name: 'Juddo D S', lat: 30.523556, lon: 77.914567 },
-  { type: 'Discharge', name: 'Hathiyari Disc', lat: 30.524031, lon: 77.884856 },
-  { type: 'AWS', name: 'Thatyur', lat: 30.506483, lon: 78.1652 },
-  { type: 'AWS', name: 'Lakhwar AWS', lat: 30.510759, lon: 77.943011 },
-  { type: 'AWS', name: 'Kisala (Barkot)', lat: 30.855556, lon: 78.285578 },
-  { type: 'Rain Gauge', name: 'Pantwari, Nagtibba', lat: 30.586892, lon: 78.087914 },
-  { type: 'Rain Gauge', name: 'Kandi Malli', lat: 30.531725, lon: 78.007053 },
-  { type: 'Rain Gauge', name: 'Juddo dam TB', lat: 30.520414, lon: 77.914848 },
-  { type: 'Rain Gauge', name: 'Purola TB', lat: 30.880086, lon: 78.073925 },
-  { type: 'Rain Gauge', name: 'Surakhet', lat: 30.802972, lon: 78.187789 },
-  { type: 'Rain Gauge', name: 'Dhanaulti', lat: 30.426903, lon: 78.243839 },
-  { type: 'Rain Gauge', name: 'Sarnol', lat: 30.919892, lon: 78.224136 },
-  { type: 'Rain Gauge', name: 'Jaindeo', lat: 30.608642, lon: 77.959983 },
-  { type: 'Rain Gauge', name: 'GauraGhati', lat: 30.7257, lon: 78.007753 },
+  { id: 'discharge-syana-chatti', type: 'Discharge', name: 'Syana Chatti', lat: 30.905956, lon: 78.360214 },
+  { id: 'discharge-kisala', type: 'Discharge', name: 'Kisala', lat: 30.855556, lon: 78.285578 },
+  { id: 'discharge-kharadi', type: 'Discharge', name: 'Kharadi', lat: 30.821142, lon: 78.235703 },
+  { id: 'discharge-purola', type: 'Discharge', name: 'Purola', lat: 30.832161, lon: 78.097931 },
+  { id: 'discharge-aglad-bridge', type: 'Discharge', name: 'Aglad Bridge', lat: 30.514358, lon: 77.999603 },
+  { id: 'discharge-bhediyana', type: 'Discharge', name: 'Bhediyana', lat: 30.509967, lon: 77.983458 },
+  { id: 'discharge-juddo-dam', type: 'Discharge', name: 'Juddo Dam', lat: 30.523556, lon: 77.914567 },
+  { id: 'discharge-hathiyari', type: 'Discharge', name: 'Hathiyari', lat: 30.524031, lon: 77.884856 },
+  { id: 'aws-thatyur', type: 'AWS', name: 'Thatyur', lat: 30.506483, lon: 78.1652 },
+  { id: 'aws-lakhwar', type: 'AWS', name: 'Lakhwar', lat: 30.510759, lon: 77.943011 },
+  { id: 'aws-kisala', type: 'AWS', name: 'Kisala', lat: 30.855556, lon: 78.285578 },
+  { id: 'rain-nagtiba', type: 'Rain Gauge', name: 'Nagtiba', lat: 30.586892, lon: 78.087914 },
+  { id: 'rain-kandimalli', type: 'Rain Gauge', name: 'KandiMalli', lat: 30.531725, lon: 78.007053 },
+  { id: 'rain-juddo', type: 'Rain Gauge', name: 'Juddo', lat: 30.520414, lon: 77.914848 },
+  { id: 'rain-purola', type: 'Rain Gauge', name: 'Purola', lat: 30.880086, lon: 78.073925 },
+  { id: 'rain-surakhet', type: 'Rain Gauge', name: 'Surakhet', lat: 30.802972, lon: 78.187789 },
+  { id: 'rain-dhanaulti', type: 'Rain Gauge', name: 'Dhanaulti', lat: 30.426903, lon: 78.243839 },
+  { id: 'rain-surnol', type: 'Rain Gauge', name: 'Surnol', lat: 30.919892, lon: 78.224136 },
+  { id: 'rain-jaindeo', type: 'Rain Gauge', name: 'Jaindeo', lat: 30.608642, lon: 77.959983 },
+  { id: 'rain-gauraghati', type: 'Rain Gauge', name: 'GauraGhati', lat: 30.7257, lon: 78.007753 },
+  { id: 'dam-vyasi', type: 'Dam', name: 'Vyasi Dam', lat: 30.520428, lon: 77.915274 },
 ];
 
 // Precomputed center of the cluster
@@ -38,11 +39,12 @@ const TABS: { id: StationType | 'All'; label: string }[] = [
   { id: 'Discharge', label: 'Discharge Stations' },
   { id: 'AWS', label: 'AWS' },
   { id: 'Rain Gauge', label: 'Rain Gauge' },
+  { id: 'Dam', label: 'Dam' },
 ];
 
 export default function MapPage() {
   const [activeTab, setActiveTab] = useState<StationType | 'All'>('All');
-  const [selectedStationName, setSelectedStationName] = useState<string | null>(null);
+  const [selectedStationId, setSelectedStationId] = useState<string | null>(null);
 
   const filteredStations = useMemo(() => {
     if (activeTab === 'All') return STATIONS;
@@ -83,7 +85,7 @@ export default function MapPage() {
             <StationsMap
               center={CENTER}
               stations={filteredStations}
-              selectedStationName={selectedStationName}
+              selectedStationId={selectedStationId}
             />
           </div>
 
@@ -99,11 +101,11 @@ export default function MapPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
               {filteredStations.map((s) => {
-                const isSelected = selectedStationName === s.name;
+                const isSelected = selectedStationId === s.id;
                 return (
                   <button
-                    key={s.name}
-                    onClick={() => setSelectedStationName(s.name)}
+                    key={s.id}
+                    onClick={() => setSelectedStationId(s.id)}
                     className={
                       'flex flex-col items-start text-left border rounded-lg px-2 py-1.5 transition-colors ' +
                       (isSelected

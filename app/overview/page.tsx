@@ -77,6 +77,18 @@ function OverviewContent() {
             setActiveTab('weather');
             setSelectedStations({ chartKeys: [stationParam], titles: [stationParam] });
         }
+        else if (tabParam === 'discharge' && stationParam) {
+            setActiveTab('discharge');
+            setSelectedStations({ chartKeys: [stationParam], titles: [stationParam] });
+        }
+        else if (tabParam === 'raingauge' && stationParam) {
+            setActiveTab('rain-gauge');
+            setSelectedStations({ chartKeys: [stationParam], titles: [stationParam] });
+        }
+        else if (tabParam === 'dam' && stationParam) {
+            setActiveTab('dam');
+            setSelectedStations({ chartKeys: [stationParam], titles: [stationParam] });
+        }
     }, [searchParams]);
 
     // Handle tab change with callback - now includes loading state

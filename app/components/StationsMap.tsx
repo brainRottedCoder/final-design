@@ -9,9 +9,10 @@ import { useRouter } from 'next/navigation';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const L: any = require('leaflet');
 
-export type StationType = 'Discharge' | 'AWS' | 'Rain Gauge';
+export type StationType = 'Discharge' | 'AWS' | 'Rain Gauge' | 'Dam';
 
 export interface Station {
+  id: string; // unique id for each station
   type: StationType;
   name: string;
   lat: number;
@@ -46,6 +47,11 @@ const VIOLET_ICON = L.icon({
   iconUrl:
     'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
 });
+const GREEN_ICON = L.icon({
+  ...iconBase,
+  iconUrl:
+    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+});
 
 L.Marker.prototype.options.icon = BLUE_ICON;
 
@@ -53,6 +59,7 @@ const TYPE_COLORS: Record<StationType, string> = {
   Discharge: '#1d4ed8', // blue
   AWS: '#ea580c', // orange
   'Rain Gauge': '#7c3aed', // violet
+  Dam: '#047857', // teal
 };
 
 // Base icons (normal state)
@@ -60,6 +67,7 @@ const TYPE_ICONS: Record<StationType, any> = {
   Discharge: BLUE_ICON,
   AWS: ORANGE_ICON,
   'Rain Gauge': VIOLET_ICON,
+  Dam: GREEN_ICON,
 };
 
 // Strongly different / larger variants for selected markers
@@ -86,15 +94,22 @@ const TYPE_SELECTED_ICONS: Record<StationType, any> = {
     iconUrl:
       'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
   }),
+  Dam: L.icon({
+    ...(GREEN_ICON.options || {}),
+    iconSize: [40, 64],
+    // bright lime instead of green
+    iconUrl:
+      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-lime.png',
+  }),
 };
 
 interface StationsMapProps {
   center: { lat: number; lon: number };
   stations: Station[];
-  selectedStationName?: string | null;
+  selectedStationId?: string | null;
 }
 
-export default function StationsMap({ center, stations, selectedStationName }: StationsMapProps) {
+export default function StationsMap({ center, stations, selectedStationId }: StationsMapProps) {
   const router = useRouter();
   // Ensure leaflet CSS is loaded once
   useEffect(() => {
@@ -128,12 +143,12 @@ export default function StationsMap({ center, stations, selectedStationName }: S
       />
       {stations.map((s) => {
         const position: [number, number] = [s.lat, s.lon];
-        const isSelected = selectedStationName === s.name;
+        const isSelected = selectedStationId === s.id;
         const baseIcon = TYPE_ICONS[s.type];
         const selectedIcon = TYPE_SELECTED_ICONS[s.type];
         const icon = isSelected ? selectedIcon : baseIcon;
         return (
-          <Marker key={s.name} {...{ position, icon } as any}>
+          <Marker key={s.id} {...{ position, icon } as any}>
             <Tooltip {...{ direction: "top", offset: [0, -20], opacity: 0.9, permanent: true } as any}>
               <span className="text-[11px] font-semibold">{s.name}</span>
             </Tooltip>
@@ -149,7 +164,17 @@ export default function StationsMap({ center, stations, selectedStationName }: S
                   onClick={() => {
                     if (s.type === 'AWS') {
                       router.push(`/overview?tab=aws&station=${encodeURIComponent(s.name)}`);
-                    } else {
+                    } 
+                    else if (s.type === 'Discharge') {
+                      router.push(`/overview?tab=discharge&station=${encodeURIComponent(s.name)}`);
+                    } 
+                    else if (s.type === 'Rain Gauge') {
+                      router.push(`/overview?tab=raingauge&station=${encodeURIComponent(s.name)}`);
+                    }
+                    else if (s.type === 'Dam') {
+                      router.push(`/overview?tab=dam&station=${encodeURIComponent(s.name)}`);
+                    }
+                    else {
                       router.push('/overview');
                     }
                   }}
