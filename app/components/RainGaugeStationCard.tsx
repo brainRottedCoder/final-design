@@ -54,7 +54,7 @@ export default function RainGaugeStationCard({
             onClick={onClick}
         >
             {/* Title */}
-            <div className="flex items-center justify-center mb-2 border-2 border-white bg-white 2xl:mb-3">
+            <div className="flex rounded-lg items-center justify-center mb-2 border-2 border-white bg-white 2xl:mb-3">
                 <h3
                     className="text-base 2xl:text-xl px-4 2xl:px-5 py-1 2xl:py-1.5 rounded-lg 2xl:rounded-xl font-bold text-gray-800 "
                 >

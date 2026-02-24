@@ -295,63 +295,113 @@ export async function fetchRainGaugesFromAPI(): Promise<RainGaugeStationsData> {
 
 // ===== DAM DATA FETCH =====
 
-export async function fetchDamStation(): Promise<DamStation> {
-    await delay(API_DELAY);
-    return {
-        id: 'dam-1',
-        title: 'Vyasi Dam',
-        headLoss: '0.45',
-        intechLevel: '120.5',
-        levelPier1: '450.2',
-        levelPier6: '448.8',
-    };
+export interface DamOverviewApiResponse {
+    status: number;
+    message: string;
+    tab: string;
+    entity: Array<{
+        name: string;
+        head_loss: number;
+        intech_level: number;
+        level_pier_1: number;
+        level_pier_6: number;
+    }>;
 }
 
-export async function fetchDamStatistics(): Promise<DamStatisticsData> {
-    await delay(API_DELAY);
+/**
+ * Fetch DAM station data from the live API.
+ * Maps API snake_case fields to the DamStation type.
+ */
+export async function fetchDamStation(): Promise<DamStation> {
+    try {
+        const res = await fetch('/api/external/overview/dam');
+        if (!res.ok) throw new Error(`API returned ${res.status}`);
+        const json: DamOverviewApiResponse = await res.json();
 
-    // Generate current values for combined comparison chart
-    const currentHeadLoss = 0.4 + Math.random() * 0.2;
-    const currentIntechLevel = 120 + Math.random() * 5;
-    const currentLevelPier1 = 450 + Math.random() * 2;
-    const currentLevelPier6 = 448 + Math.random() * 2;
-    const maxCombinedValue = Math.max(currentIntechLevel, currentLevelPier1, currentLevelPier6) * 1.2;
+        const dam = json.entity[0];
+        if (!dam) throw new Error('No dam data in API response');
+
+        const fmt = (v: number) => v.toFixed(2);
+
+        return {
+            id: 'dam-1',
+            title: dam.name,
+            headLoss: fmt(dam.head_loss),
+            intechLevel: fmt(dam.intech_level),
+            levelPier1: fmt(dam.level_pier_1),
+            levelPier6: fmt(dam.level_pier_6),
+        };
+    } catch (error) {
+        console.error('Failed to fetch dam station from API:', error);
+        throw new Error('Failed to fetch dam station. API not responding.');
+    }
+}
+
+/**
+ * Build dam statistics charts.
+ * The combined chart uses live values from the API; individual time-series
+ * use simulated data until a historical API endpoint is available.
+ */
+export function buildDamStatisticsFromStation(station: DamStation): DamStatisticsData {
+    const currentHeadLoss = parseFloat(station.headLoss);
+    const currentIntechLevel = parseFloat(station.intechLevel);
+    const currentLevelPier1 = parseFloat(station.levelPier1);
+    const currentLevelPier6 = parseFloat(station.levelPier6);
+    const maxCombinedValue = Math.max(currentIntechLevel, currentLevelPier1, currentLevelPier6) * 1.0005;
 
     return {
         sectionTitle: 'Dam Statistics',
         charts: {
             headLoss: {
                 title: 'Head Loss (m)',
-                data: Array.from({ length: 24 }, (_, i) => ({ name: `${i}:00`, value: 0.4 + Math.random() * 0.2 })),
-                maxValue: 1
+                data: Array.from({ length: 24 }, (_, i) => ({
+                    name: `${i}:00`,
+                    value: parseFloat((currentHeadLoss * (0.9 + Math.random() * 0.2)).toFixed(4)),
+                })),
+                maxValue: parseFloat((currentHeadLoss * 1.5).toFixed(2)) || 1,
             },
             intechLevel: {
                 title: 'Intech Level (m)',
-                data: Array.from({ length: 24 }, (_, i) => ({ name: `${i}:00`, value: 120 + Math.random() * 5 })),
-                maxValue: 150
+                data: Array.from({ length: 24 }, (_, i) => ({
+                    name: `${i}:00`,
+                    value: parseFloat((currentIntechLevel * (0.9998 + Math.random() * 0.0004)).toFixed(4)),
+                })),
+                maxValue: parseFloat((currentIntechLevel * 1.001).toFixed(2)),
             },
             levelPier1: {
                 title: 'Level Pier 1 (m)',
-                data: Array.from({ length: 24 }, (_, i) => ({ name: `${i}:00`, value: 450 + Math.random() * 2 })),
-                maxValue: 460
+                data: Array.from({ length: 24 }, (_, i) => ({
+                    name: `${i}:00`,
+                    value: parseFloat((currentLevelPier1 * (0.9998 + Math.random() * 0.0004)).toFixed(4)),
+                })),
+                maxValue: parseFloat((currentLevelPier1 * 1.001).toFixed(2)),
             },
             levelPier6: {
                 title: 'Level Pier 6 (m)',
-                data: Array.from({ length: 24 }, (_, i) => ({ name: `${i}:00`, value: 448 + Math.random() * 2 })),
-                maxValue: 460
+                data: Array.from({ length: 24 }, (_, i) => ({
+                    name: `${i}:00`,
+                    value: parseFloat((currentLevelPier6 * (0.9998 + Math.random() * 0.0004)).toFixed(4)),
+                })),
+                maxValue: parseFloat((currentLevelPier6 * 1.001).toFixed(2)),
             },
             combined: {
                 title: 'Dam Levels Comparison',
                 data: [
-                    { name: 'Head Loss', value: parseFloat(currentHeadLoss.toFixed(2)) },
-                    { name: 'Intech Level', value: parseFloat(currentIntechLevel.toFixed(2)) },
-                    { name: 'Level Pier 1', value: parseFloat(currentLevelPier1.toFixed(2)) },
-                    { name: 'Level Pier 6', value: parseFloat(currentLevelPier6.toFixed(2)) },
+                    { name: 'Head Loss', value: currentHeadLoss },
+                    { name: 'Intech Level', value: currentIntechLevel },
+                    { name: 'Level Pier 1', value: currentLevelPier1 },
+                    { name: 'Level Pier 6', value: currentLevelPier6 },
                 ],
-                maxValue: Math.ceil(maxCombinedValue)
+                maxValue: Math.ceil(maxCombinedValue),
             },
-        }
+        },
     };
+}
+
+export async function fetchDamStatistics(): Promise<DamStatisticsData> {
+    // Fetch live dam values to seed the statistics
+    const station = await fetchDamStation();
+    return buildDamStatisticsFromStation(station);
 }
 
 // ===== ALL DATA FETCH (single call for initial load) =====
@@ -468,16 +518,17 @@ function buildRainGaugeStatisticsFromStations(stations: RainGaugeStationsData): 
 }
 
 export async function fetchAllDashboardData(): Promise<AllDashboardData> {
-    // Fetch all live API data in parallel
-    const [liveDashboard, liveDischargeStations, liveWeatherStations, liveRainGaugeStations, liveDamStation, liveDamStatistics] = await Promise.all([
+    // Fetch all live API data in parallel (dam statistics derived after station fetch)
+    const [liveDashboard, liveDischargeStations, liveWeatherStations, liveRainGaugeStations, liveDamStation] = await Promise.all([
         fetchOverviewSummary(),
         fetchDischargeStationsFromAPI(),
         fetchAWSFromAPI(),
         fetchRainGaugesFromAPI(),
         fetchDamStation(),
-        fetchDamStatistics(),
-        delay(API_DELAY),
     ]);
+
+    // Build dam statistics seeded from live dam values
+    const liveDamStatistics = buildDamStatisticsFromStation(liveDamStation);
 
     // Derive statistics from live station data
     const liveDischargeStatistics = buildDischargeStatisticsFromStations(liveDischargeStations);
