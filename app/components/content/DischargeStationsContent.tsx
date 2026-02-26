@@ -12,6 +12,7 @@ interface DischargeStationsContentProps {
 }
 
 export default function DischargeStationsContent({ onStationSelect, selectedChartKeys = [], onClearAll, stationsData }: DischargeStationsContentProps) {
+    // Use chartKey for local selection state to match parent's selectedChartKeys
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     if (!stationsData) {
@@ -27,20 +28,25 @@ export default function DischargeStationsContent({ onStationSelect, selectedChar
 
     // Sync local selection state with parent's selectedChartKeys
     useEffect(() => {
-        if (selectedChartKeys.length === 0) {
-            setSelectedIds([]);
-        }
-    }, [selectedChartKeys]);
+        // Get all chartKeys from stations
+        const stationChartKeys = stationsData?.stations.map(s => s.chartKey) || [];
+
+        // Filter selectedChartKeys to only include valid station keys that exist in current stations
+        const validKeys = selectedChartKeys.filter(key => stationChartKeys.includes(key));
+
+        // Always set to exactly the valid keys (replace entirely, don't merge)
+        setSelectedIds(validKeys);
+    }, [selectedChartKeys, stationsData]);
 
     const handleCardClick = (id: string, chartKey: string, title: string) => {
         setSelectedIds(prev => {
-            const isSelected = prev.includes(id);
+            const isSelected = prev.includes(chartKey);
             if (isSelected) {
                 // Deselect - remove from array
-                return prev.filter(selectedId => selectedId !== id);
+                return prev.filter(selectedId => selectedId !== chartKey);
             } else {
                 // Select - add to array
-                return [...prev, id];
+                return [...prev, chartKey];
             }
         });
         // Pass to parent for chart highlighting
@@ -82,7 +88,7 @@ export default function DischargeStationsContent({ onStationSelect, selectedChar
                         velocity={station.velocity}
                         waterLevel={station.waterLevel}
                         color={station.color}
-                        isSelected={selectedIds.includes(station.id)}
+                        isSelected={selectedIds.includes(station.chartKey)}
                         onClick={() => handleCardClick(station.id, station.chartKey, station.title)}
                     />
                 ))}

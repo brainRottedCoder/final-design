@@ -167,14 +167,12 @@ export async function fetchDischargeStationsFromAPI(): Promise<DischargeStations
             velocity: number;
             water_level: number;
         }>).map((s, i) => {
-            // Generate a short chartKey from the station name
-            const chartKey = s.name
-                .split(' ')
-                .map((w: string) => w[0]?.toUpperCase() ?? '')
-                .join('');
-
             // Extract river name (remove "River" suffix if present)
             const riverName = s.name.replace(/\s+River$/i, '').trim();
+
+            // Use full riverName as chartKey to avoid collisions
+            // (initials cause duplicates, e.g. "Kisala" and "Kharadi" both → "K")
+            const chartKey = riverName;
 
             return {
                 id: `ds-${String(i + 1).padStart(3, '0')}`,
@@ -427,10 +425,8 @@ function buildDischargeStatisticsFromStations(stations: DischargeStationsData): 
 
     const buildChart = (title: string, getValue: (s: typeof stationList[0]) => number) => {
         const data = stationList.map(s => {
-            // Use riverName if available, otherwise fall back to title
-            const riverName = s.riverName || s.title.replace(/\s+River$/i, '').trim();
             return {
-                name: riverName,
+                name: s.chartKey,
                 value: parseFloat(getValue(s).toString()),
             };
         });
@@ -561,10 +557,7 @@ export async function fetchDischargeStationNames(): Promise<Array<{ id: string; 
         const json = await res.json();
 
         return (json.entity as Array<{ name: string }>).map((s, i) => {
-            const chartKey = s.name
-                .split(' ')
-                .map((w: string) => w[0]?.toUpperCase() ?? '')
-                .join('');
+            const chartKey = s.name.replace(/\s+River$/i, '').trim();
             return {
                 id: s.name,   // Use the station name as the ID so it can be sent directly to the report API
                 title: s.name,

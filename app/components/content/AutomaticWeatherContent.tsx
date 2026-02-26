@@ -21,6 +21,7 @@ export default function AutomaticWeatherContent({
     selectedParameters = [],
     stationsData,
 }: AutomaticWeatherContentProps) {
+    // Use chartKey for local selection state to match parent's selectedChartKeys
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     if (!stationsData) {
@@ -36,18 +37,23 @@ export default function AutomaticWeatherContent({
 
     // Sync local selection state with parent's selectedChartKeys
     useEffect(() => {
-        if (selectedChartKeys.length === 0) {
-            setSelectedIds([]);
-        }
-    }, [selectedChartKeys]);
+        // Get all chartKeys from stations
+        const stationChartKeys = stationsData?.stations.map(s => s.chartKey) || [];
+
+        // Filter selectedChartKeys to only include valid station keys that exist in current stations
+        const validKeys = selectedChartKeys.filter(key => stationChartKeys.includes(key));
+
+        // Always set to exactly the valid keys (replace entirely, don't merge)
+        setSelectedIds(validKeys);
+    }, [selectedChartKeys, stationsData]);
 
     const handleCardClick = (id: string, chartKey: string, title: string) => {
         setSelectedIds(prev => {
-            const isSelected = prev.includes(id);
+            const isSelected = prev.includes(chartKey);
             if (isSelected) {
-                return prev.filter(selectedId => selectedId !== id);
+                return prev.filter(selectedId => selectedId !== chartKey);
             } else {
-                return [...prev, id];
+                return [...prev, chartKey];
             }
         });
         onStationSelect?.(chartKey, title);
@@ -99,7 +105,7 @@ export default function AutomaticWeatherContent({
                             rainfallDay={station.rainfallDay}
                             rainfallTotal={station.rainfallTotal}
                             color={station.color as 'blue' | 'green' | 'orange'}
-                            isSelected={selectedIds.includes(station.id)}
+                            isSelected={selectedIds.includes(station.chartKey)}
                             selectedParameters={selectedParameters}
                             onClick={() => handleCardClick(station.id, station.chartKey, station.title)}
                             onParameterSelect={handleParameterSelect}

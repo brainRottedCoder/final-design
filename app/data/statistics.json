@@ -6,35 +6,35 @@
                 "title": "Discharge",
                 "data": [
                     {
-                        "name": "SCYR",
+                        "name": "Syana Chatti",
                         "value": 290
                     },
                     {
-                        "name": "GR",
+                        "name": "Ganga",
                         "value": 480
                     },
                     {
-                        "name": "Sr",
+                        "name": "Satluj",
                         "value": 420
                     },
                     {
-                        "name": "Br",
+                        "name": "Brahmaputra",
                         "value": 490
                     },
                     {
-                        "name": "InR",
+                        "name": "Indus",
                         "value": 520
                     },
                     {
-                        "name": "JR",
+                        "name": "Jamuna",
                         "value": 480
                     },
                     {
-                        "name": "Ko",
+                        "name": "Kosi",
                         "value": 500
                     },
                     {
-                        "name": "Kv",
+                        "name": "Kaveri",
                         "value": 500
                     }
                 ],
@@ -44,35 +44,35 @@
                 "title": "Velocity",
                 "data": [
                     {
-                        "name": "SCYR",
+                        "name": "Syana Chatti",
                         "value": 420
                     },
                     {
-                        "name": "GR",
+                        "name": "Ganga",
                         "value": 480
                     },
                     {
-                        "name": "Sr",
+                        "name": "Satluj",
                         "value": 460
                     },
                     {
-                        "name": "Br",
+                        "name": "Brahmaputra",
                         "value": 480
                     },
                     {
-                        "name": "InR",
+                        "name": "Indus",
                         "value": 440
                     },
                     {
-                        "name": "JR",
+                        "name": "Jamuna",
                         "value": 420
                     },
                     {
-                        "name": "Ko",
+                        "name": "Kosi",
                         "value": 400
                     },
                     {
-                        "name": "Kv",
+                        "name": "Kaveri",
                         "value": 400
                     }
                 ],
@@ -82,35 +82,35 @@
                 "title": "Water Level",
                 "data": [
                     {
-                        "name": "SCYR",
+                        "name": "Syana Chatti",
                         "value": 450
                     },
                     {
-                        "name": "GR",
+                        "name": "Ganga",
                         "value": 480
                     },
                     {
-                        "name": "Sr",
+                        "name": "Satluj",
                         "value": 420
                     },
                     {
-                        "name": "Br",
+                        "name": "Brahmaputra",
                         "value": 480
                     },
                     {
-                        "name": "InR",
+                        "name": "Indus",
                         "value": 350
                     },
                     {
-                        "name": "JR",
+                        "name": "Jamuna",
                         "value": 420
                     },
                     {
-                        "name": "Ko",
+                        "name": "Kosi",
                         "value": 380
                     },
                     {
-                        "name": "Kv",
+                        "name": "Kaveri",
                         "value": 380
                     }
                 ],
